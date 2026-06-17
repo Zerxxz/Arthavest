@@ -28,8 +28,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { StreamVisualizer } from "@/components/stream/StreamVisualizer";
+import { useTranslation } from "@/lib/useTranslation";
 
 export function InvestorDashboard() {
+  const { t } = useTranslation();
   const wallet = useAppStore((s) => s.wallet);
   const positions = useAppStore((s) => s.positions);
   const umkms = useAppStore((s) => s.umkms);
@@ -51,10 +53,9 @@ export function InvestorDashboard() {
         <div className="container mx-auto max-w-2xl px-4 text-center">
           <Card className="p-12">
             <Wallet className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-bold mb-2">Wallet belum terhubung</h3>
+            <h3 className="text-xl font-bold mb-2">{t("investor.walletNotConnected")}</h3>
             <p className="text-sm text-muted-foreground mb-6">
-              Hubungkan wallet via zkLogin (Google/Twitch) atau Ethos Wallet di kanan atas
-              untuk melihat portfolio dan stream aktifmu.
+              {t("investor.walletNotConnectedDesc")}
             </p>
             <div className="flex flex-wrap justify-center gap-2 text-xs text-muted-foreground">
               <Badge variant="secondary" className="gap-1">
@@ -63,7 +64,7 @@ export function InvestorDashboard() {
               </Badge>
               <Badge variant="secondary" className="gap-1">
                 <Gift className="h-3 w-3" />
-                Sponsored tx untuk first-timer
+                {t("detail.sponsoredFirst")}
               </Badge>
               <Badge variant="secondary" className="gap-1">
                 <Zap className="h-3 w-3" />
@@ -88,12 +89,12 @@ export function InvestorDashboard() {
     if (!stream) return;
     const amount = accruedAmount(stream);
     if (amount <= 0) {
-      toast.error("Tidak ada saldo untuk di-withdraw");
+      toast.error("No balance available for withdrawal");
       return;
     }
     withdrawFromStream(streamId, amount);
-    toast.success("Withdraw berhasil!", {
-      description: `${formatIDR(amount)} ditambahkan ke saldo IDR. Tx: ${shortAddress(generateRandomDigest())}`,
+    toast.success("Withdrawal successful!", {
+      description: `${formatIDR(amount)} added to IDR balance · tx: ${shortAddress(generateRandomDigest())}`,
     });
   };
 
@@ -111,7 +112,7 @@ export function InvestorDashboard() {
         {/* Page header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Portfolio Investor</h2>
+            <h2 className="text-2xl font-bold tracking-tight">{t("investor.title")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-2">
               {wallet.viaZkLogin ? (
                 <>
@@ -128,7 +129,7 @@ export function InvestorDashboard() {
           </div>
           <Button variant="outline" className="gap-2" onClick={() => setActiveTab("marketplace")}>
             <ArrowUpRight className="h-4 w-4" />
-            Investasi UMKM lain
+            {t("investor.investMore")}
           </Button>
         </div>
 
@@ -136,29 +137,29 @@ export function InvestorDashboard() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[
             {
-              label: "Total Investasi",
+              label: t("investor.totalInvested"),
               value: formatIDR(totalInvested, { compact: true }),
               icon: Wallet,
               color: "text-primary",
               bg: "bg-primary/10",
             },
             {
-              label: "Nilai Portfolio",
+              label: t("investor.portfolioValue"),
               value: formatIDR(portfolioValue, { compact: true }),
               icon: TrendingUp,
               color: "text-emerald-600",
               bg: "bg-emerald-100",
             },
             {
-              label: "Stream Aktif",
+              label: t("investor.activeStreams"),
               value: `${streams.length} stream`,
               icon: Droplets,
               color: "text-amber-600",
               bg: "bg-amber-100",
-              sub: `${totalRatePerSecond.toFixed(4)} IDR/detik`,
+              sub: `${totalRatePerSecond.toFixed(4)} IDR/s`,
             },
             {
-              label: "Sudah Ditarik",
+              label: t("investor.withdrawn"),
               value: formatIDR(totalWithdrawn + totalAccrued, { compact: true }),
               icon: ArrowDownToLine,
               color: "text-rose-600",
@@ -190,10 +191,10 @@ export function InvestorDashboard() {
             <div>
               <h3 className="text-base font-bold flex items-center gap-2">
                 <Droplets className="h-4 w-4 text-primary" />
-                Stream Profit Aktif
+                {t("investor.streamTitle")}
               </h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Profit mengalir real-time ke wallet-mu · update setiap 500ms
+                {t("investor.streamSubtitle")}
               </p>
             </div>
             <Badge variant="secondary" className="gap-1 bg-emerald-100 text-emerald-700">
@@ -212,19 +213,19 @@ export function InvestorDashboard() {
           {/* Projection strip */}
           <div className="grid grid-cols-3 gap-2 mt-3">
             <div className="rounded-lg bg-background/50 border border-border/40 p-2.5">
-              <div className="text-[10px] text-muted-foreground">Akumulasi harian</div>
+              <div className="text-[10px] text-muted-foreground">{t("investor.dailyAccrual")}</div>
               <div className="text-sm font-bold text-primary">
                 {formatIDR(totalRatePerSecond * 86400, { compact: true })}
               </div>
             </div>
             <div className="rounded-lg bg-background/50 border border-border/40 p-2.5">
-              <div className="text-[10px] text-muted-foreground">Proyeksi bulanan</div>
+              <div className="text-[10px] text-muted-foreground">{t("investor.monthlyProj")}</div>
               <div className="text-sm font-bold text-emerald-600">
                 {formatIDR(monthlyProjection, { compact: true })}
               </div>
             </div>
             <div className="rounded-lg bg-background/50 border border-border/40 p-2.5">
-              <div className="text-[10px] text-muted-foreground">Siap di-withdraw</div>
+              <div className="text-[10px] text-muted-foreground">{t("investor.readyWithdraw")}</div>
               <div className="text-sm font-bold text-amber-600">
                 {formatIDR(totalAccrued, { compact: true })}
               </div>
@@ -234,7 +235,7 @@ export function InvestorDashboard() {
 
         {/* Active streams list */}
         <Card className="p-5">
-          <h3 className="text-base font-bold mb-4">Detail Stream per UMKM</h3>
+          <h3 className="text-base font-bold mb-4">{t("investor.streamDetail")}</h3>
           <div className="space-y-3">
             {streams.map((stream) => {
               const umkm = umkms.find((u) => u.id === stream.umkmId);
@@ -255,7 +256,7 @@ export function InvestorDashboard() {
                           {stream.umkmName}
                           <Badge variant="outline" className="text-[9px] gap-0.5">
                             <Sparkles className="h-2.5 w-2.5" />
-                            {stream.sharesOwned} saham
+                            {stream.sharesOwned} {t("investor.shares")}
                           </Badge>
                         </div>
                         <div className="text-[11px] text-muted-foreground font-mono mt-0.5">
@@ -282,10 +283,10 @@ export function InvestorDashboard() {
                     </div>
                     <Progress value={progressPct} className="h-1.5" />
                     <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1">
-                      <span>Sudah ditarik: {formatIDR(stream.withdrawnAmount)}</span>
+                      <span>{t("investor.alreadyWithdrawn", { amount: formatIDR(stream.withdrawnAmount) })}</span>
                       <span className="flex items-center gap-1">
                         <Clock className="h-2.5 w-2.5" />
-                        {timeRemaining(stream.endTime)} tersisa
+                        {t("investor.timeRemaining", { time: timeRemaining(stream.endTime) })}
                       </span>
                     </div>
                   </div>
@@ -293,7 +294,7 @@ export function InvestorDashboard() {
                   {/* Action row */}
                   <div className="flex items-center justify-between gap-3 pt-2 border-t border-border/40">
                     <div>
-                      <div className="text-[10px] text-muted-foreground">Saldo tersedia</div>
+                      <div className="text-[10px] text-muted-foreground">{t("investor.saldoTersedia")}</div>
                       <motion.div
                         key={Math.floor(accrued)}
                         initial={{ scale: 1.02, color: "oklch(0.7 0.17 75)" }}
@@ -310,7 +311,7 @@ export function InvestorDashboard() {
                       disabled={accrued <= 0}
                     >
                       <ArrowDownToLine className="h-3.5 w-3.5" />
-                      Withdraw
+                      {t("investor.withdraw")}
                     </Button>
                   </div>
                 </div>
@@ -321,17 +322,17 @@ export function InvestorDashboard() {
 
         {/* Portfolio table */}
         <Card className="p-5">
-          <h3 className="text-base font-bold mb-4">Posisi Saham</h3>
+          <h3 className="text-base font-bold mb-4">{t("investor.positionsTitle")}</h3>
           <div className="overflow-x-auto scrollbar-warm">
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left text-[11px] text-muted-foreground border-b border-border/60">
-                  <th className="pb-2 font-medium">UMKM</th>
-                  <th className="pb-2 font-medium text-right">Saham</th>
-                  <th className="pb-2 font-medium text-right">Avg Buy</th>
-                  <th className="pb-2 font-medium text-right">Investasi</th>
-                  <th className="pb-2 font-medium text-right">Ditarik</th>
-                  <th className="pb-2 font-medium text-right">ROI</th>
+                  <th className="pb-2 font-medium">{t("investor.col.umkm")}</th>
+                  <th className="pb-2 font-medium text-right">{t("investor.col.shares")}</th>
+                  <th className="pb-2 font-medium text-right">{t("investor.col.avgBuy")}</th>
+                  <th className="pb-2 font-medium text-right">{t("investor.col.invested")}</th>
+                  <th className="pb-2 font-medium text-right">{t("investor.col.withdrawn")}</th>
+                  <th className="pb-2 font-medium text-right">{t("investor.col.roi")}</th>
                 </tr>
               </thead>
               <tbody>

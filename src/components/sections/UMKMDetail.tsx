@@ -40,8 +40,26 @@ import { formatIDR, formatPercent } from "@/lib/format";
 import { useState } from "react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "@/lib/useTranslation";
+import type { UMKMCategory } from "@/lib/types";
+
+const RISK_KEYS: Record<string, string> = {
+  rendah: "market.riskLow",
+  sedang: "market.riskMedium",
+  tinggi: "market.riskHigh",
+};
+
+const CATEGORY_KEYS: Record<UMKMCategory, string> = {
+  kuliner: "market.cat.kuliner",
+  kopi: "market.cat.kopi",
+  laundry: "market.cat.laundry",
+  kerajinan: "market.cat.kerajinan",
+  jasa: "market.cat.jasa",
+  pertanian: "market.cat.pertanian",
+};
 
 export function UMKMDetail() {
+  const { t } = useTranslation();
   const selectedUMKMId = useAppStore((s) => s.selectedUMKMId);
   const setSelectedUMKM = useAppStore((s) => s.setSelectedUMKM);
   const umkm = useAppStore((s) => (s.selectedUMKMId ? s.getUMKM(s.selectedUMKMId) : undefined));
@@ -56,8 +74,8 @@ export function UMKMDetail() {
   const handleBuy = async () => {
     if (!umkm) return;
     if (!wallet.connected) {
-      toast.error("Wallet belum terhubung", {
-        description: "Hubungkan wallet via zkLogin atau Ethos untuk mulai investasi.",
+      toast.error(t("investor.walletNotConnected"), {
+        description: t("detail.connectWalletHint"),
       });
       return;
     }
@@ -74,7 +92,7 @@ export function UMKMDetail() {
     setTxPhase("done");
 
     if (result.success) {
-      toast.success("Transaksi PTB terkonfirmasi!", {
+      toast.success(t("detail.txConfirmed"), {
         description: result.message,
       });
       setTimeout(() => {
@@ -83,7 +101,7 @@ export function UMKMDetail() {
         setSharesToBuy(1);
       }, 1500);
     } else {
-      toast.error("Transaksi gagal", { description: result.message });
+      toast.error("Transaction failed", { description: result.message });
       setTxPhase("idle");
     }
   };
@@ -111,16 +129,16 @@ export function UMKMDetail() {
           <div className="absolute inset-0 bg-grid-warm opacity-30" />
           <div className="absolute top-4 left-4 flex gap-1.5">
             <Badge className="bg-background/80 backdrop-blur-sm text-foreground border-0">
-              {umkm.category}
+              {t(CATEGORY_KEYS[umkm.category])}
             </Badge>
             {umkm.verifiedKyc && (
               <Badge className="bg-emerald-500/90 text-white border-0 gap-1">
                 <ShieldCheck className="h-3 w-3" />
-                KYC Verified
+                {t("market.kycVerified")}
               </Badge>
             )}
             <Badge variant="outline" className="bg-background/80 backdrop-blur-sm border-0">
-              Risiko {umkm.riskLevel}
+              {t(RISK_KEYS[umkm.riskLevel])}
             </Badge>
           </div>
           <div className="absolute -bottom-6 left-6 h-16 w-16 rounded-2xl bg-card border-4 border-background flex items-center justify-center text-3xl shadow-lg">
@@ -135,7 +153,7 @@ export function UMKMDetail() {
               <DialogDescription className="text-base mt-1">{umkm.tagline}</DialogDescription>
             </div>
             <div className="text-right">
-              <div className="text-xs text-muted-foreground">Estimasi APY</div>
+              <div className="text-xs text-muted-foreground">{t("market.estAPY")}</div>
               <div className="text-xl font-bold text-emerald-600">{formatPercent(umkm.apyEstimate)}</div>
             </div>
           </div>
@@ -147,11 +165,12 @@ export function UMKMDetail() {
             </span>
             <span className="flex items-center gap-1">
               <Calendar className="h-3.5 w-3.5" />
-              Berdiri {umkm.establishedYear} · {new Date().getFullYear() - umkm.establishedYear} tahun
+              {t("detail.established", { year: umkm.establishedYear })} ·{" "}
+              {t("detail.years", { n: new Date().getFullYear() - umkm.establishedYear })}
             </span>
             <span className="flex items-center gap-1">
               <Users className="h-3.5 w-3.5" />
-              Owner: {umkm.ownerName}
+              {t("detail.owner")}: {umkm.ownerName}
             </span>
             <span className="flex items-center gap-1 text-primary">
               <Database className="h-3.5 w-3.5" />
@@ -163,17 +182,17 @@ export function UMKMDetail() {
         <div className="px-6 pb-6 space-y-6">
           {/* Description */}
           <div>
-            <h4 className="text-sm font-semibold mb-2">Tentang UMKM</h4>
+            <h4 className="text-sm font-semibold mb-2">{t("detail.about")}</h4>
             <p className="text-sm text-muted-foreground leading-relaxed">{umkm.description}</p>
           </div>
 
           {/* Financial metrics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { label: "Revenue/bulan", value: formatIDR(umkm.monthlyRevenue, { compact: true }), icon: TrendingUp },
-              { label: "Profit/bulan", value: formatIDR(umkm.monthlyProfit, { compact: true }), icon: Droplets },
-              { label: "Valuasi", value: formatIDR(umkm.valuation, { compact: true }), icon: Wallet },
-              { label: "Distribusi profit", value: `Tgl ${umkm.profitDistributionDay}`, icon: Calendar },
+              { label: t("detail.revenueMonth"), value: formatIDR(umkm.monthlyRevenue, { compact: true }), icon: TrendingUp },
+              { label: t("detail.profitMonth"), value: formatIDR(umkm.monthlyProfit, { compact: true }), icon: Droplets },
+              { label: t("detail.valuation"), value: formatIDR(umkm.valuation, { compact: true }), icon: Wallet },
+              { label: t("detail.distributionDay"), value: `Day ${umkm.profitDistributionDay}`, icon: Calendar },
             ].map((m) => (
               <div key={m.label} className="rounded-xl border border-border/60 bg-card p-3">
                 <m.icon className="h-4 w-4 text-primary mb-1.5" />
@@ -185,7 +204,7 @@ export function UMKMDetail() {
 
           {/* Revenue chart */}
           <div>
-            <h4 className="text-sm font-semibold mb-2">Performa 6 bulan terakhir</h4>
+            <h4 className="text-sm font-semibold mb-2">{t("detail.performance6m")}</h4>
             <div className="rounded-xl border border-border/60 bg-card p-4 h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={umkm.revenueHistory}>
@@ -239,19 +258,19 @@ export function UMKMDetail() {
           {/* Funding progress */}
           <div>
             <div className="flex items-center justify-between mb-2">
-              <h4 className="text-sm font-semibold">Progress funding</h4>
+              <h4 className="text-sm font-semibold">{t("detail.fundingProgress")}</h4>
               <span className="text-xs text-muted-foreground">
                 {umkm.availableShares > 0
-                  ? `${umkm.availableShares} saham tersisa dari ${umkm.totalShares}`
-                  : "Sold out"}
+                  ? `${umkm.availableShares} ${t("market.sharesLeft")} · ${umkm.totalShares}`
+                  : t("market.soldOut")}
               </span>
             </div>
             <Progress value={fundedPct} className="h-2" />
             <div className="flex items-center justify-between text-xs mt-2">
               <span className="text-muted-foreground">
-                Terdanai: {formatIDR((umkm.totalShares - umkm.availableShares) * umkm.pricePerShare)}
+                {t("market.funded")}: {formatIDR((umkm.totalShares - umkm.availableShares) * umkm.pricePerShare)}
               </span>
-              <span className="font-mono font-semibold">{formatIDR(umkm.pricePerShare)} / saham</span>
+              <span className="font-mono font-semibold">{formatIDR(umkm.pricePerShare)} {t("market.perShare")}</span>
             </div>
           </div>
 
@@ -260,18 +279,18 @@ export function UMKMDetail() {
             <div className="flex items-center justify-between mb-3">
               <h4 className="text-sm font-semibold flex items-center gap-1.5">
                 <Zap className="h-4 w-4 text-primary" />
-                Beli Saham via PTB
+                {t("detail.buyViaPTB")}
               </h4>
               <Badge variant="secondary" className="text-[10px] gap-1">
                 <ShieldCheck className="h-2.5 w-2.5" />
-                Sponsored tx untuk first-timer
+                {t("detail.sponsoredFirst")}
               </Badge>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mb-3">
               <div>
                 <Label htmlFor="shares" className="text-xs text-muted-foreground mb-1.5 block">
-                  Jumlah saham
+                  {t("detail.numShares")}
                 </Label>
                 <Input
                   id="shares"
@@ -283,16 +302,16 @@ export function UMKMDetail() {
                   disabled={txPhase !== "idle" && txPhase !== "done" || umkm.availableShares === 0}
                 />
                 <div className="text-[10px] text-muted-foreground mt-1">
-                  Max: {umkm.availableShares} saham
+                  {t("detail.maxShares", { n: umkm.availableShares })}
                 </div>
               </div>
               <div>
-                <Label className="text-xs text-muted-foreground mb-1.5 block">Total biaya</Label>
+                <Label className="text-xs text-muted-foreground mb-1.5 block">{t("detail.totalCost")}</Label>
                 <div className="h-9 rounded-md border border-border bg-background px-3 flex items-center text-sm font-bold">
                   {formatIDR(totalCost)}
                 </div>
                 <div className="text-[10px] text-muted-foreground mt-1">
-                  Est. profit: {formatIDR(estMonthlyProfit, { compact: true })}/bulan
+                  {t("detail.estProfit", { amount: formatIDR(estMonthlyProfit, { compact: true }) })}
                 </div>
               </div>
             </div>
@@ -301,9 +320,9 @@ export function UMKMDetail() {
             <div className="rounded-lg bg-background/60 border border-border/40 p-2.5 mb-3">
               <div className="flex items-center gap-2 text-[11px]">
                 <Droplets className="h-3 w-3 text-primary" />
-                <span className="text-muted-foreground">Setelah profit distribution:</span>
+                <span className="text-muted-foreground">{t("detail.afterDistribution")}</span>
                 <span className="font-mono font-semibold text-primary">
-                  +{estRatePerSecond.toFixed(4)} IDR/detik
+                  +{estRatePerSecond.toFixed(4)} IDR/s
                 </span>
               </div>
             </div>
@@ -318,9 +337,9 @@ export function UMKMDetail() {
                   className="rounded-lg bg-background/80 border border-primary/20 p-3 mb-3 space-y-2"
                 >
                   {[
-                    { key: "building", label: "Membangun PTB (pay + receive + mint receipt)" },
-                    { key: "signing", label: "Menandatangani transaksi" },
-                    { key: "executing", label: "Eksekusi atomik di Sui network" },
+                    { key: "building", label: t("detail.ptbBuilding") },
+                    { key: "signing", label: t("detail.ptbSigning") },
+                    { key: "executing", label: t("detail.ptbExecuting") },
                   ].map((phase) => {
                     const phaseOrder = ["building", "signing", "executing"];
                     const currentIdx = phaseOrder.indexOf(txPhase);
@@ -354,17 +373,19 @@ export function UMKMDetail() {
               {txPhase === "done" ? (
                 <>
                   <CheckCircle2 className="h-4 w-4" />
-                  Transaksi terkonfirmasi!
+                  {t("detail.txConfirmed")}
                 </>
               ) : txPhase !== "idle" ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Memproses PTB...
+                  {t("detail.processingPTB")}
                 </>
               ) : (
                 <>
                   <Wallet className="h-4 w-4" />
-                  {umkm.availableShares === 0 ? "Sold Out" : `Beli ${sharesToBuy} saham · ${formatIDR(totalCost, { compact: true })}`}
+                  {umkm.availableShares === 0
+                    ? t("market.soldOut")
+                    : `${t("detail.buy")} ${sharesToBuy} ${t("investor.shares")} · ${formatIDR(totalCost, { compact: true })}`}
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
@@ -372,7 +393,7 @@ export function UMKMDetail() {
 
             {!wallet.connected && (
               <p className="text-[11px] text-amber-600 text-center mt-2">
-                Hubungkan wallet (Google/Ethos) di kanan atas untuk mulai investasi.
+                {t("detail.connectWalletHint")}
               </p>
             )}
           </div>

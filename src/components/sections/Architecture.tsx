@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { SUI_FEATURES } from "@/lib/sui-features";
 import * as Icons from "lucide-react";
-import { SUISTREAM_PRIMITIVE_DESCRIPTION } from "@/lib/sui-features";
+import { useTranslation } from "@/lib/useTranslation";
 
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Boxes,
@@ -27,7 +27,27 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   LineChart,
 };
 
+// Map SuiStream capability indices to translation keys (first 4 used here).
+// Order matches SUISTREAM_PRIMITIVE_DESCRIPTION.capabilities in sui-features.ts.
+const SUISTREAM_CAP_KEYS = [
+  { labelKey: "how.cap.ratePerSec", valueKey: "how.cap.configurable" },
+  { labelKey: "how.cap.cliffVesting", valueKey: "how.cap.milestoneUnlock" },
+  { labelKey: "how.cap.transferable", valueKey: "how.cap.sendToOther" },
+  { labelKey: "how.cap.cancellable", valueKey: "how.cap.refundRemaining" },
+  { labelKey: "how.cap.composable", valueKey: "how.cap.packNft" },
+] as const;
+
+// Tree visualization items. Names + types are Move identifiers (kept as-is);
+// `descKey` points to the translated caption.
+const TREE_ITEMS = [
+  { name: "UMKM", type: "struct has key, store", descKey: "arch.tree.umkm", icon: "🏪" },
+  { name: "ShareToken", type: "coin::Coin<SAHAM>", descKey: "arch.tree.shareToken", icon: "🪙" },
+  { name: "ProfitReport", type: "struct has key", descKey: "arch.tree.profitReport", icon: "📊" },
+  { name: "Distribution", type: "struct has key", descKey: "arch.tree.distribution", icon: "📦" },
+] as const;
+
 export function Architecture() {
+  const { t } = useTranslation();
   return (
     <section className="py-16 lg:py-24 bg-gradient-to-b from-accent/10 to-background">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,15 +59,13 @@ export function Architecture() {
         >
           <Badge variant="outline" className="mb-4 gap-1.5 bg-accent/30 border-accent/50">
             <Sparkles className="h-3 w-3" />
-            <span className="text-xs font-semibold">Sui-Native Architecture</span>
+            <span className="text-xs font-semibold">{t("arch.badge")}</span>
           </Badge>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-            Dibangun di atas{" "}
-            <span className="text-gradient-emerald">kekuatan unik Sui</span>
+            <span className="text-gradient-emerald">{t("arch.title")}</span>
           </h2>
           <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            SahamKita tidak mungkin sebersih ini di EVM. Setiap fitur Sui yang dipakai bukan
-            gimmick — ini adalah alasan kenapa produk ini harus dibangun di Sui.
+            {t("arch.subtitle")}
           </p>
         </motion.div>
 
@@ -73,22 +91,22 @@ export function Architecture() {
                       {feature.id}
                     </Badge>
                   </div>
-                  <h3 className="font-bold text-base mb-2">{feature.name}</h3>
+                  <h3 className="font-bold text-base mb-2">{t(`arch.feature.${feature.id}.name`)}</h3>
                   <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-                    {feature.description}
+                    {t(`arch.feature.${feature.id}.description`)}
                   </p>
                   <div className="space-y-1.5 pt-3 border-t border-border/40">
                     <div className="flex items-start gap-1.5">
                       <span className="text-[10px] font-mono text-primary font-semibold uppercase tracking-wide min-w-[40px]">
-                        Pakai
+                        {t("arch.pakai")}
                       </span>
-                      <span className="text-[11px] text-muted-foreground">{feature.usedIn}</span>
+                      <span className="text-[11px] text-muted-foreground">{t(`arch.feature.${feature.id}.usedIn`)}</span>
                     </div>
                     <div className="flex items-start gap-1.5">
                       <span className="text-[10px] font-mono text-amber-600 font-semibold uppercase tracking-wide min-w-[40px]">
-                        Benefit
+                        {t("arch.benefit")}
                       </span>
-                      <span className="text-[11px] text-muted-foreground">{feature.benefit}</span>
+                      <span className="text-[11px] text-muted-foreground">{t(`arch.feature.${feature.id}.benefit`)}</span>
                     </div>
                   </div>
                 </Card>
@@ -109,11 +127,10 @@ export function Architecture() {
             <div>
               <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                 <Boxes className="h-5 w-5 text-primary" />
-                Object Model di Sui
+                {t("arch.objectModelTitle")}
               </h3>
               <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
-                Setiap entity di SahamKita adalah object Move yang punya ID unik. Ownership
-                ditentukan oleh object owner field — bukan mapping di contract storage.
+                {t("arch.objectModelBody")}
               </p>
 
               {/* Tree visualization */}
@@ -123,18 +140,13 @@ export function Architecture() {
                   <span className="font-bold">Package: saham_kita::</span>
                 </div>
                 <div className="ml-6 space-y-1.5">
-                  {[
-                    { name: "UMKM", type: "struct has key, store", desc: "NFT object, owner = UMKM wallet", icon: "🏪" },
-                    { name: "ShareToken", type: "coin::Coin<SAHAM>", desc: "Fungible, transferable, fractional", icon: "🪙" },
-                    { name: "ProfitReport", type: "struct has key", desc: "Object berisi Walrus blob ID + amount", icon: "📊" },
-                    { name: "Distribution", type: "struct has key", desc: "PTB receipt berisi semua stream IDs", icon: "📦" },
-                  ].map((item) => (
+                  {TREE_ITEMS.map((item) => (
                     <div key={item.name} className="flex items-start gap-2 p-2.5 rounded-lg bg-secondary/40 border border-border/40">
                       <span className="text-base">{item.icon}</span>
                       <div className="flex-1 min-w-0">
                         <div className="font-bold text-foreground">{item.name}</div>
                         <div className="text-[10px] text-primary">{item.type}</div>
-                        <div className="text-[10px] text-muted-foreground">{item.desc}</div>
+                        <div className="text-[10px] text-muted-foreground">{t(item.descKey)}</div>
                       </div>
                     </div>
                   ))}
@@ -142,7 +154,7 @@ export function Architecture() {
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-amber-50 border border-amber-200 mt-2">
                   <Droplets className="h-4 w-4 text-amber-600 flex-shrink-0" />
                   <span className="font-bold">Package: suistream::</span>
-                  <Badge variant="outline" className="text-[9px] ml-auto">Primitive</Badge>
+                  <Badge variant="outline" className="text-[9px] ml-auto">{t("arch.primitive")}</Badge>
                 </div>
                 <div className="ml-6 space-y-1.5">
                   <div className="flex items-start gap-2 p-2.5 rounded-lg bg-amber-50/50 border border-amber-200/40">
@@ -161,12 +173,10 @@ export function Architecture() {
             <div>
               <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
                 <Workflow className="h-5 w-5 text-amber-600" />
-                Programmable Transaction Block
+                {t("arch.ptbTitle")}
               </h3>
               <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
-                Distribusi profit ke ratusan investor dieksekusi dalam 1 PTB. Setiap langkah
-                bisa bergantung pada output langkah sebelumnya. Atomic: kalau 1 gagal, semua
-                rollback.
+                {t("arch.ptbBody")}
               </p>
 
               <div className="rounded-xl bg-zinc-900 border border-zinc-700 overflow-hidden">
@@ -225,15 +235,15 @@ client.execute(ptb); // 1 tx, ~800ms finality`}
 
               <div className="grid grid-cols-3 gap-2 mt-4">
                 <div className="rounded-lg bg-secondary/40 p-2.5 text-center">
-                  <div className="text-[10px] text-muted-foreground">Investor</div>
+                  <div className="text-[10px] text-muted-foreground">{t("arch.stat.investor")}</div>
                   <div className="text-base font-bold text-primary">47-312</div>
                 </div>
                 <div className="rounded-lg bg-secondary/40 p-2.5 text-center">
-                  <div className="text-[10px] text-muted-foreground">Finality</div>
+                  <div className="text-[10px] text-muted-foreground">{t("arch.stat.finality")}</div>
                   <div className="text-base font-bold text-emerald-600">~800ms</div>
                 </div>
                 <div className="rounded-lg bg-secondary/40 p-2.5 text-center">
-                  <div className="text-[10px] text-muted-foreground">Gas</div>
+                  <div className="text-[10px] text-muted-foreground">{t("arch.stat.gas")}</div>
                   <div className="text-base font-bold text-amber-600">~0.03 SUI</div>
                 </div>
               </div>
@@ -252,23 +262,20 @@ client.execute(ptb); // 1 tx, ~800ms finality`}
             <div className="flex-1">
               <Badge variant="outline" className="mb-2 gap-1.5 bg-background/60 border-primary/30">
                 <Droplets className="h-3 w-3 text-primary" />
-                <span className="text-[10px] font-semibold uppercase tracking-wide">Reusability angle</span>
+                <span className="text-[10px] font-semibold uppercase tracking-wide">{t("arch.reusability")}</span>
               </Badge>
               <h3 className="text-xl font-bold mb-2">
-                {SUISTREAM_PRIMITIVE_DESCRIPTION.name} — bukan satu produk
+                {t("arch.reusabilityTitle")}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                SuiStream dirancang sebagai primitive yang reusable. Bisa dipakai untuk payroll
-                freelancer, vesting token, subscription yang di-resell, atau pembayaran cicilan
-                mikro. SahamKita adalah use case pertamanya, tapi ekosistem bisa membangun di
-                atasnya tanpa minta izin.
+                {t("arch.reusabilityBody")}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-2 min-w-[200px]">
-              {SUISTREAM_PRIMITIVE_DESCRIPTION.capabilities.slice(0, 4).map((cap) => (
-                <div key={cap.label} className="rounded-lg bg-background/70 border border-border/40 p-2">
-                  <div className="text-[10px] font-semibold text-primary">{cap.label}</div>
-                  <div className="text-[10px] text-muted-foreground">{cap.value}</div>
+              {SUISTREAM_CAP_KEYS.slice(0, 4).map((cap) => (
+                <div key={cap.labelKey} className="rounded-lg bg-background/70 border border-border/40 p-2">
+                  <div className="text-[10px] font-semibold text-primary">{t(cap.labelKey)}</div>
+                  <div className="text-[10px] text-muted-foreground">{t(cap.valueKey)}</div>
                 </div>
               ))}
             </div>

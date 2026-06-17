@@ -35,22 +35,23 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { formatIDR, shortAddress } from "@/lib/format";
+import { useTranslation } from "@/lib/useTranslation";
 import type { UMKMCategory } from "@/lib/types";
 
 const STEPS = [
-  { id: 0, label: "Info Dasar", icon: Store },
-  { id: 1, label: "Finansial", icon: Boxes },
-  { id: 2, label: "Dokumen Walrus", icon: Database },
-  { id: 3, label: "Review & Submit", icon: ShieldCheck },
+  { id: 0, icon: Store },
+  { id: 1, icon: Boxes },
+  { id: 2, icon: Database },
+  { id: 3, icon: ShieldCheck },
 ];
 
-const CATEGORIES: { value: UMKMCategory; label: string; emoji: string }[] = [
-  { value: "kuliner", label: "Kuliner", emoji: "🍲" },
-  { value: "kopi", label: "Kopi", emoji: "☕" },
-  { value: "laundry", label: "Laundry", emoji: "🧺" },
-  { value: "kerajinan", label: "Kerajinan", emoji: "🥬" },
-  { value: "jasa", label: "Jasa", emoji: "🔧" },
-  { value: "pertanian", label: "Pertanian", emoji: "🌱" },
+const CATEGORY_VALUES: { value: UMKMCategory; emoji: string }[] = [
+  { value: "kuliner", emoji: "🍲" },
+  { value: "kopi", emoji: "☕" },
+  { value: "laundry", emoji: "🧺" },
+  { value: "kerajinan", emoji: "🥬" },
+  { value: "jasa", emoji: "🔧" },
+  { value: "pertanian", emoji: "🌱" },
 ];
 
 export function OnboardingUMKM() {
@@ -59,6 +60,7 @@ export function OnboardingUMKM() {
   const uploadWalrusDoc = useAppStore((s) => s.uploadWalrusDoc);
   const submitOnboard = useAppStore((s) => s.submitOnboard);
   const wallet = useAppStore((s) => s.wallet);
+  const { t } = useTranslation();
 
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState<"idle" | "building" | "signing" | "executing" | "done">("idle");
@@ -66,8 +68,8 @@ export function OnboardingUMKM() {
   const handleUpload = async (docType: "legal" | "financial") => {
     const result = await uploadWalrusDoc(docType);
     if (result.success) {
-      toast.success(`Upload ke Walrus sukses!`, {
-        description: `Blob ID: ${result.blobId} · Tersimpan permanen & immutable`,
+      toast.success(`Upload to Walrus successful!`, {
+        description: `Blob ID: ${result.blobId} · Stored permanently & immutable`,
       });
     }
   };
@@ -84,7 +86,7 @@ export function OnboardingUMKM() {
     setSubmitting("done");
 
     if (result.success) {
-      toast.success("UMKM onboarded!", {
+      toast.success("MSME onboarded!", {
         description: `${result.message} · tx ${shortAddress(result.txDigest)}`,
       });
       setTimeout(() => {
@@ -92,7 +94,7 @@ export function OnboardingUMKM() {
         setStep(0);
       }, 2000);
     } else {
-      toast.error("Submit gagal", { description: result.message });
+      toast.error("Submit failed", { description: result.message });
       setSubmitting("idle");
     }
   };
@@ -120,10 +122,10 @@ export function OnboardingUMKM() {
       <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Header */}
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Onboard UMKM ke SahamKita</h2>
+          <h2 className="text-2xl font-bold tracking-tight">{t("onboard.title")}</h2>
           <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-2">
             <Store className="h-3.5 w-3.5 text-primary" />
-            Mint UMKM NFT + share tokens via PTB · Dokumen legal permanen di Walrus
+            {t("onboard.subtitle")}
           </p>
         </div>
 
@@ -145,10 +147,10 @@ export function OnboardingUMKM() {
                 </div>
                 <div className="hidden sm:block flex-1 min-w-0">
                   <div className={`text-xs font-medium ${step >= s.id ? "text-foreground" : "text-muted-foreground"}`}>
-                    Step {s.id + 1}
+                    {t("onboard.step")} {s.id + 1}
                   </div>
                   <div className={`text-[11px] ${step === s.id ? "text-primary font-semibold" : "text-muted-foreground"}`}>
-                    {s.label}
+                    {t(`onboard.step${s.id + 1}`)}
                   </div>
                 </div>
                 {i < STEPS.length - 1 && (
@@ -175,30 +177,30 @@ export function OnboardingUMKM() {
                   <div>
                     <h3 className="text-lg font-bold flex items-center gap-2 mb-1">
                       <Store className="h-4 w-4 text-primary" />
-                      Informasi Dasar UMKM
+                      {t("onboard.basicTitle")}
                     </h3>
-                    <p className="text-xs text-muted-foreground">Detail ini akan tertera di marketplace & NFT object on-chain.</p>
+                    <p className="text-xs text-muted-foreground">{t("onboard.basicSubtitle")}</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-xs text-muted-foreground mb-1.5 block">Nama UMKM *</Label>
+                      <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.name")}</Label>
                       <Input
                         value={form.name}
                         onChange={(e) => updateForm({ name: e.target.value })}
-                        placeholder="cth: Kopi Senja"
+                        placeholder={t("onboard.namePlaceholder")}
                       />
                     </div>
                     <div>
-                      <Label className="text-xs text-muted-foreground mb-1.5 block">Kategori *</Label>
+                      <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.category")}</Label>
                       <Select value={form.category} onValueChange={(v) => updateForm({ category: v as UMKMCategory })}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {CATEGORIES.map((c) => (
+                          {CATEGORY_VALUES.map((c) => (
                             <SelectItem key={c.value} value={c.value}>
-                              {c.emoji} {c.label}
+                              {c.emoji} {t(`market.cat.${c.value}`)}
                             </SelectItem>
                           ))}
                         </SelectContent>
@@ -207,30 +209,30 @@ export function OnboardingUMKM() {
                   </div>
 
                   <div>
-                    <Label className="text-xs text-muted-foreground mb-1.5 block">Tagline *</Label>
+                    <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.tagline")}</Label>
                     <Input
                       value={form.tagline}
                       onChange={(e) => updateForm({ tagline: e.target.value })}
-                      placeholder="cth: Spesialti coffee roastery dari Bandung"
+                      placeholder={t("onboard.taglinePlaceholder")}
                       maxLength={80}
                     />
                   </div>
 
                   <div>
-                    <Label className="text-xs text-muted-foreground mb-1.5 block">Lokasi *</Label>
+                    <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.location")}</Label>
                     <Input
                       value={form.location}
                       onChange={(e) => updateForm({ location: e.target.value })}
-                      placeholder="cth: Bandung, Jawa Barat"
+                      placeholder={t("onboard.locationPlaceholder")}
                     />
                   </div>
 
                   <div>
-                    <Label className="text-xs text-muted-foreground mb-1.5 block">Deskripsi *</Label>
+                    <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.description")}</Label>
                     <Textarea
                       value={form.description}
                       onChange={(e) => updateForm({ description: e.target.value })}
-                      placeholder="Ceritakan sejarah, model bisnis, rencana ekspansi, dan use of funds..."
+                      placeholder={t("onboard.descriptionPlaceholder")}
                       rows={4}
                       maxLength={500}
                     />
@@ -245,46 +247,46 @@ export function OnboardingUMKM() {
                   <div>
                     <h3 className="text-lg font-bold flex items-center gap-2 mb-1">
                       <Boxes className="h-4 w-4 text-primary" />
-                      Data Finansial & Tokenomics
+                      {t("onboard.financialTitle")}
                     </h3>
-                    <p className="text-xs text-muted-foreground">Menentukan valuasi, jumlah saham, dan estimasi APY investor.</p>
+                    <p className="text-xs text-muted-foreground">{t("onboard.financialSubtitle")}</p>
                   </div>
 
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
-                      <Label className="text-xs text-muted-foreground mb-1.5 block">Revenue bulanan (IDR) *</Label>
+                      <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.monthlyRevenue")}</Label>
                       <Input
                         type="number"
                         value={form.monthlyRevenue || ""}
                         onChange={(e) => updateForm({ monthlyRevenue: Number(e.target.value) })}
-                        placeholder="cth: 145000000"
+                        placeholder="e.g.: 145000000"
                       />
                     </div>
                     <div>
-                      <Label className="text-xs text-muted-foreground mb-1.5 block">Profit bulanan (IDR) *</Label>
+                      <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.monthlyProfit")}</Label>
                       <Input
                         type="number"
                         value={form.monthlyProfit || ""}
                         onChange={(e) => updateForm({ monthlyProfit: Number(e.target.value) })}
-                        placeholder="cth: 28000000"
+                        placeholder="e.g.: 28000000"
                       />
                     </div>
                     <div>
-                      <Label className="text-xs text-muted-foreground mb-1.5 block">Total saham (supply) *</Label>
+                      <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.totalShares")}</Label>
                       <Input
                         type="number"
                         value={form.totalShares || ""}
                         onChange={(e) => updateForm({ totalShares: Number(e.target.value) })}
-                        placeholder="cth: 1800"
+                        placeholder="e.g.: 1800"
                       />
                     </div>
                     <div>
-                      <Label className="text-xs text-muted-foreground mb-1.5 block">Harga per saham (IDR) *</Label>
+                      <Label className="text-xs text-muted-foreground mb-1.5 block">{t("onboard.pricePerShare")}</Label>
                       <Input
                         type="number"
                         value={form.pricePerShare || ""}
                         onChange={(e) => updateForm({ pricePerShare: Number(e.target.value) })}
-                        placeholder="cth: 1000000"
+                        placeholder="e.g.: 1000000"
                       />
                     </div>
                   </div>
@@ -292,18 +294,18 @@ export function OnboardingUMKM() {
                   {/* Auto-calculated valuation card */}
                   {totalValuation > 0 && (
                     <div className="rounded-xl bg-gradient-to-br from-primary/5 to-accent/10 border border-primary/20 p-4">
-                      <div className="text-xs font-semibold text-primary mb-2">Preview Tokenomics</div>
+                      <div className="text-xs font-semibold text-primary mb-2">{t("onboard.tokenomicsPreview")}</div>
                       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         <div>
-                          <div className="text-[10px] text-muted-foreground">Total valuasi</div>
+                          <div className="text-[10px] text-muted-foreground">{t("onboard.totalValuation")}</div>
                           <div className="text-base font-bold">{formatIDR(totalValuation, { compact: true })}</div>
                         </div>
                         <div>
-                          <div className="text-[10px] text-muted-foreground">Estimasi APY</div>
+                          <div className="text-[10px] text-muted-foreground">{t("onboard.estAPY")}</div>
                           <div className="text-base font-bold text-emerald-600">{estApy.toFixed(1)}%</div>
                         </div>
                         <div>
-                          <div className="text-[10px] text-muted-foreground">Profit per saham/bulan</div>
+                          <div className="text-[10px] text-muted-foreground">{t("onboard.profitPerShare")}</div>
                           <div className="text-base font-bold text-amber-600">
                             {form.totalShares > 0 ? formatIDR(form.monthlyProfit / form.totalShares, { compact: true }) : "-"}
                           </div>
@@ -320,17 +322,16 @@ export function OnboardingUMKM() {
                   <div>
                     <h3 className="text-lg font-bold flex items-center gap-2 mb-1">
                       <Database className="h-4 w-4 text-primary" />
-                      Upload Dokumen ke Walrus
+                      {t("onboard.walrusTitle")}
                     </h3>
                     <p className="text-xs text-muted-foreground">
-                      Dokumen disimpan permanen & immutable di Walrus storage. Blob ID tercatat on-chain sebagai audit trail.
-                      DAO jury akan verifikasi dokumen ini sebelum UMKM bisa list di marketplace.
+                      {t("onboard.walrusSubtitle")}
                     </p>
                   </div>
 
                   <WalrusUploadCard
-                    title="Dokumen Legal"
-                    description="Akta pendirian, NPWP, KTP pemilik (PDF, max 10MB)"
+                    title={t("onboard.legalDoc")}
+                    description={t("onboard.legalDocDesc")}
                     icon={FileText}
                     status={form.legalDocStatus}
                     blobId={form.legalDocBlobId}
@@ -338,8 +339,8 @@ export function OnboardingUMKM() {
                   />
 
                   <WalrusUploadCard
-                    title="Laporan Keuangan"
-                    description="Laporan rugi laba 6 bulan terakhir + bank statement (PDF/Excel, max 10MB)"
+                    title={t("onboard.financialDoc")}
+                    description={t("onboard.financialDocDesc")}
                     icon={ImageIcon}
                     status={form.financialDocStatus}
                     blobId={form.financialDocBlobId}
@@ -351,12 +352,9 @@ export function OnboardingUMKM() {
                     <div className="flex items-start gap-2">
                       <AlertCircle className="h-3.5 w-3.5 text-amber-600 flex-shrink-0 mt-0.5" />
                       <div>
-                        <div className="font-semibold text-amber-900 mb-1">Tentang Walrus Storage</div>
+                        <div className="font-semibold text-amber-900 mb-1">{t("onboard.aboutWalrus")}</div>
                         <p className="text-amber-700 leading-relaxed">
-                          Walrus adalah storage terdesentralisasi Sui ecosystem. Setiap file di-encode dengan
-                          erasure coding (Reed-Solomon) lalu didistribusikan ke ratusan node. Setelah blob ID
-                          tercatat on-chain, dokumen tidak bisa dihapus atau diubah — audit trail permanen untuk
-                          investor & regulator.
+                          {t("onboard.aboutWalrusBody")}
                         </p>
                       </div>
                     </div>
@@ -370,26 +368,26 @@ export function OnboardingUMKM() {
                   <div>
                     <h3 className="text-lg font-bold flex items-center gap-2 mb-1">
                       <ShieldCheck className="h-4 w-4 text-primary" />
-                      Review & Submit Onboarding
+                      {t("onboard.reviewTitle")}
                     </h3>
                     <p className="text-xs text-muted-foreground">
-                      1 PTB akan dieksekusi: mint UMKM NFT + mint {form.totalShares} share tokens + emit onboarded event.
+                      {t("onboard.reviewSubtitle", { n: form.totalShares })}
                     </p>
                   </div>
 
                   <div className="rounded-xl border border-border/60 divide-y divide-border/40">
-                    <ReviewRow label="Nama UMKM" value={form.name || "-"} />
-                    <ReviewRow label="Kategori" value={CATEGORIES.find((c) => c.value === form.category)?.label ?? "-"} />
-                    <ReviewRow label="Lokasi" value={form.location || "-"} />
-                    <ReviewRow label="Tagline" value={form.tagline || "-"} />
-                    <ReviewRow label="Revenue/bulan" value={form.monthlyRevenue ? formatIDR(form.monthlyRevenue) : "-"} />
-                    <ReviewRow label="Profit/bulan" value={form.monthlyProfit ? formatIDR(form.monthlyProfit) : "-"} />
-                    <ReviewRow label="Total saham" value={form.totalShares ? `${form.totalShares} saham` : "-"} />
-                    <ReviewRow label="Harga/saham" value={form.pricePerShare ? formatIDR(form.pricePerShare) : "-"} />
-                    <ReviewRow label="Valuasi total" value={totalValuation > 0 ? formatIDR(totalValuation) : "-"} />
-                    <ReviewRow label="Estimasi APY" value={`${estApy.toFixed(1)}%`} />
-                    <ReviewRow label="Walrus blob (legal)" value={form.legalDocBlobId ?? "-"} mono />
-                    <ReviewRow label="Walrus blob (finansial)" value={form.financialDocBlobId ?? "-"} mono />
+                    <ReviewRow label={t("onboard.name").replace(" *", "")} value={form.name || "-"} />
+                    <ReviewRow label={t("onboard.category").replace(" *", "")} value={CATEGORY_VALUES.find((c) => c.value === form.category) ? t(`market.cat.${form.category}`) : "-"} />
+                    <ReviewRow label={t("onboard.location").replace(" *", "")} value={form.location || "-"} />
+                    <ReviewRow label={t("onboard.tagline").replace(" *", "")} value={form.tagline || "-"} />
+                    <ReviewRow label={t("onboard.monthlyRevenue").replace(" (IDR) *", "").replace(" *", "")} value={form.monthlyRevenue ? formatIDR(form.monthlyRevenue) : "-"} />
+                    <ReviewRow label={t("onboard.monthlyProfit").replace(" (IDR) *", "").replace(" *", "")} value={form.monthlyProfit ? formatIDR(form.monthlyProfit) : "-"} />
+                    <ReviewRow label={t("onboard.totalShares").replace(" (supply) *", "").replace(" (供应量) *", "").replace(" *", "")} value={form.totalShares ? `${form.totalShares} shares` : "-"} />
+                    <ReviewRow label={t("onboard.pricePerShare").replace(" (IDR) *", "").replace(" *", "")} value={form.pricePerShare ? formatIDR(form.pricePerShare) : "-"} />
+                    <ReviewRow label={t("onboard.totalValuation")} value={totalValuation > 0 ? formatIDR(totalValuation) : "-"} />
+                    <ReviewRow label={t("onboard.estAPY")} value={`${estApy.toFixed(1)}%`} />
+                    <ReviewRow label={t("onboard.walrusBlobLegal")} value={form.legalDocBlobId ?? "-"} mono />
+                    <ReviewRow label={t("onboard.walrusBlobFinancial")} value={form.financialDocBlobId ?? "-"} mono />
                   </div>
 
                   {/* PTB preview */}
@@ -426,9 +424,9 @@ ptb.execute(); // 1 tx, atomic, ~800ms finality`}
                   {submitting !== "idle" && (
                     <div className="rounded-lg bg-primary/5 border border-primary/20 p-3 space-y-2">
                       {[
-                        { key: "building", label: "Membangun PTB (mint NFT + share tokens)" },
-                        { key: "signing", label: "Menandatangani transaksi" },
-                        { key: "executing", label: "Eksekusi atomik di Sui testnet" },
+                        { key: "building", label: t("onboard.ptbBuilding") },
+                        { key: "signing", label: t("onboard.ptbSigning") },
+                        { key: "executing", label: t("onboard.ptbExecuting") },
                       ].map((phase, i) => {
                         const order = ["building", "signing", "executing", "done"];
                         const currentIdx = order.indexOf(submitting);
@@ -467,11 +465,11 @@ ptb.execute(); // 1 tx, atomic, ~800ms finality`}
             className="gap-2"
           >
             <ArrowLeft className="h-4 w-4" />
-            Kembali
+            {t("onboard.back")}
           </Button>
 
           <div className="text-xs text-muted-foreground">
-            Step {step + 1} dari {STEPS.length}
+            {t("onboard.step")} {step + 1} {t("onboard.of")} {STEPS.length}
           </div>
 
           {step < STEPS.length - 1 ? (
@@ -480,7 +478,7 @@ ptb.execute(); // 1 tx, atomic, ~800ms finality`}
               disabled={!canNext()}
               className="gap-2"
             >
-              Lanjut
+              {t("onboard.next")}
               <ArrowRight className="h-4 w-4" />
             </Button>
           ) : (
@@ -492,17 +490,17 @@ ptb.execute(); // 1 tx, atomic, ~800ms finality`}
               {submitting === "done" ? (
                 <>
                   <CheckCircle2 className="h-4 w-4" />
-                  Onboarded!
+                  {t("onboard.onboarded")}
                 </>
               ) : submitting !== "idle" ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Submitting...
+                  {t("onboard.submitting")}
                 </>
               ) : (
                 <>
                   <Sparkles className="h-4 w-4" />
-                  Submit Onboarding
+                  {t("onboard.submit")}
                 </>
               )}
             </Button>
@@ -511,7 +509,7 @@ ptb.execute(); // 1 tx, atomic, ~800ms finality`}
 
         {/* Wallet info */}
         <div className="text-center text-[11px] text-muted-foreground">
-          Wallet: <span className="font-mono">{shortAddress(wallet.address)}</span> · Submit akan trigger PTB di Sui testnet
+          {t("onboard.walletInfo", { addr: shortAddress(wallet.address) })}
         </div>
       </div>
     </section>
@@ -533,6 +531,7 @@ function WalrusUploadCard({
   blobId: string | null;
   onUpload: () => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className={`rounded-xl border-2 p-4 transition-colors ${
       status === "uploaded" ? "border-emerald-300 bg-emerald-50/40" :
@@ -558,7 +557,7 @@ function WalrusUploadCard({
             {status === "uploading" && (
               <div className="mt-2">
                 <Progress value={50} className="h-1" />
-                <div className="text-[10px] text-primary mt-1 font-mono">Uploading to Walrus...</div>
+                <div className="text-[10px] text-primary mt-1 font-mono">{t("onboard.uploading")} Walrus...</div>
               </div>
             )}
             {status === "uploaded" && blobId && (
@@ -578,14 +577,14 @@ function WalrusUploadCard({
           {status === "uploaded" ? (
             <>
               <CheckCircle2 className="h-3.5 w-3.5" />
-              Uploaded
+              {t("onboard.uploaded")}
             </>
           ) : status === "uploading" ? (
-            "Uploading..."
+            t("onboard.uploading")
           ) : (
             <>
               <Upload className="h-3.5 w-3.5" />
-              Upload
+              {t("onboard.upload")}
             </>
           )}
         </Button>

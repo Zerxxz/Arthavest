@@ -20,20 +20,27 @@ import { formatIDR, formatPercent } from "@/lib/format";
 import { useState } from "react";
 import { UMKMDetail } from "./UMKMDetail";
 import type { UMKMCategory } from "@/lib/types";
-
-const CATEGORY_LABELS: Record<UMKMCategory, string> = {
-  kuliner: "Kuliner",
-  kopi: "Kopi",
-  laundry: "Laundry",
-  kerajinan: "Kerajinan",
-  jasa: "Jasa",
-  pertanian: "Pertanian",
-};
+import { useTranslation } from "@/lib/useTranslation";
 
 const RISK_COLORS: Record<string, string> = {
   rendah: "bg-emerald-100 text-emerald-700 border-emerald-200",
   sedang: "bg-amber-100 text-amber-700 border-amber-200",
   tinggi: "bg-rose-100 text-rose-700 border-rose-200",
+};
+
+const RISK_KEYS: Record<string, string> = {
+  rendah: "market.riskLow",
+  sedang: "market.riskMedium",
+  tinggi: "market.riskHigh",
+};
+
+const CATEGORY_KEYS: Record<UMKMCategory, string> = {
+  kuliner: "market.cat.kuliner",
+  kopi: "market.cat.kopi",
+  laundry: "market.cat.laundry",
+  kerajinan: "market.cat.kerajinan",
+  jasa: "market.cat.jasa",
+  pertanian: "market.cat.pertanian",
 };
 
 export function Marketplace() {
@@ -42,6 +49,7 @@ export function Marketplace() {
   const positions = useAppStore((s) => s.positions);
   const [filter, setFilter] = useState<UMKMCategory | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const { t } = useTranslation();
 
   const filtered = umkms.filter((u) => {
     const matchesCat = filter === "all" || u.category === filter;
@@ -60,10 +68,10 @@ export function Marketplace() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
             <h2 className="text-3xl font-bold tracking-tight mb-2">
-              Marketplace UMKM
+              {t("market.title")}
             </h2>
             <p className="text-sm text-muted-foreground">
-              {umkms.length} UMKM terverifikasi · Profit distribution via SuiStream
+              {t("market.subtitle", { count: umkms.length })}
             </p>
           </div>
 
@@ -72,7 +80,7 @@ export function Marketplace() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Cari UMKM, lokasi, atau kategori..."
+              placeholder={t("market.searchPlaceholder")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 rounded-lg bg-card border border-border text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -90,19 +98,19 @@ export function Marketplace() {
                 : "bg-secondary text-secondary-foreground hover:bg-secondary/70"
             }`}
           >
-            Semua
+            {t("market.all")}
           </button>
-          {Object.entries(CATEGORY_LABELS).map(([cat, label]) => (
+          {(Object.keys(CATEGORY_KEYS) as UMKMCategory[]).map((cat) => (
             <button
               key={cat}
-              onClick={() => setFilter(cat as UMKMCategory)}
+              onClick={() => setFilter(cat)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
                 filter === cat
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-secondary/70"
               }`}
             >
-              {label}
+              {t(CATEGORY_KEYS[cat])}
             </button>
           ))}
         </div>
@@ -130,18 +138,18 @@ export function Marketplace() {
                     <div className="absolute inset-0 bg-grid-warm opacity-30" />
                     <div className="absolute top-3 left-3 flex gap-1.5">
                       <Badge className="bg-background/80 backdrop-blur-sm text-foreground border-0 text-[10px]">
-                        {CATEGORY_LABELS[umkm.category]}
+                        {t(CATEGORY_KEYS[umkm.category])}
                       </Badge>
                       {umkm.verifiedKyc && (
                         <Badge className="bg-emerald-500/90 text-white border-0 gap-1 text-[10px]">
                           <ShieldCheck className="h-2.5 w-2.5" />
-                          KYC
+                          {t("market.kycVerified")}
                         </Badge>
                       )}
                     </div>
                     <div className="absolute top-3 right-3">
                       <div className={`px-2 py-0.5 rounded-full text-[10px] font-semibold border ${RISK_COLORS[umkm.riskLevel]}`}>
-                        Risiko {umkm.riskLevel}
+                        {t(RISK_KEYS[umkm.riskLevel])}
                       </div>
                     </div>
                     <div className="absolute -bottom-3 left-4 h-12 w-12 rounded-xl bg-card border-2 border-background flex items-center justify-center text-2xl shadow-sm">
@@ -149,7 +157,7 @@ export function Marketplace() {
                     </div>
                     {userPosition && (
                       <div className="absolute -bottom-3 right-4 px-2 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold shadow-sm">
-                        {userPosition.sharesOwned} saham dimiliki
+                        {userPosition.sharesOwned} {t("market.sharesOwned")}
                       </div>
                     )}
                   </div>
@@ -165,7 +173,7 @@ export function Marketplace() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />
-                        {new Date().getFullYear() - umkm.establishedYear} thn
+                        {t("detail.years", { n: new Date().getFullYear() - umkm.establishedYear })}
                       </span>
                       <span className="flex items-center gap-1">
                         <Users className="h-3 w-3" />
@@ -176,13 +184,13 @@ export function Marketplace() {
                     {/* Financial highlights */}
                     <div className="grid grid-cols-2 gap-2 mb-3">
                       <div className="rounded-lg bg-secondary/50 p-2">
-                        <div className="text-[10px] text-muted-foreground">Profit/bulan</div>
+                        <div className="text-[10px] text-muted-foreground">{t("market.profitPerMonth")}</div>
                         <div className="text-sm font-bold">{formatIDR(umkm.monthlyProfit, { compact: true })}</div>
                       </div>
                       <div className="rounded-lg bg-secondary/50 p-2">
                         <div className="text-[10px] text-muted-foreground flex items-center gap-0.5">
                           <TrendingUp className="h-2.5 w-2.5" />
-                          Estimasi APY
+                          {t("market.estAPY")}
                         </div>
                         <div className="text-sm font-bold text-emerald-600">{formatPercent(umkm.apyEstimate)}</div>
                       </div>
@@ -192,7 +200,7 @@ export function Marketplace() {
                     <div className="mb-3">
                       <div className="flex items-center justify-between text-[11px] mb-1.5">
                         <span className="text-muted-foreground">
-                          Terdanai {formatIDR((umkm.totalShares - umkm.availableShares) * umkm.pricePerShare, { compact: true })}
+                          {t("market.funded")} {formatIDR((umkm.totalShares - umkm.availableShares) * umkm.pricePerShare, { compact: true })}
                         </span>
                         <span className="font-semibold">{fundedPct.toFixed(0)}%</span>
                       </div>
@@ -202,9 +210,9 @@ export function Marketplace() {
                       />
                       <div className="flex items-center justify-between text-[10px] mt-1.5">
                         <span className="text-muted-foreground">
-                          {umkm.availableShares > 0 ? `${umkm.availableShares} saham tersisa` : "Sold out"}
+                          {umkm.availableShares > 0 ? `${umkm.availableShares} ${t("market.sharesLeft")}` : t("market.soldOut")}
                         </span>
-                        <span className="font-mono">{formatIDR(umkm.pricePerShare, { compact: true })}/saham</span>
+                        <span className="font-mono">{formatIDR(umkm.pricePerShare, { compact: true })}{t("market.perShare")}</span>
                       </div>
                     </div>
 
@@ -219,11 +227,11 @@ export function Marketplace() {
                       }}
                     >
                       {isSoldOut ? (
-                        "Sold Out — Lihat Detail"
+                        t("market.soldOutViewDetail")
                       ) : (
                         <>
                           <Droplets className="h-3.5 w-3.5" />
-                          Investasi Sekarang
+                          {t("market.investNow")}
                         </>
                       )}
                     </Button>
@@ -237,7 +245,7 @@ export function Marketplace() {
         {filtered.length === 0 && (
           <div className="text-center py-16">
             <AlertTriangle className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-            <p className="text-sm text-muted-foreground">Tidak ada UMKM yang cocok dengan filter Anda.</p>
+            <p className="text-sm text-muted-foreground">{t("market.noMatch")}</p>
           </div>
         )}
       </div>

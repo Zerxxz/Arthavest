@@ -20,23 +20,34 @@ import {
   Zap,
   Wifi,
   WifiOff,
+  Sun,
+  Moon,
+  Languages,
+  Check,
 } from "lucide-react";
 import { shortAddress, formatIDR, formatSUI } from "@/lib/format";
 import { motion, AnimatePresence } from "framer-motion";
 import { useHybridWallet } from "@/lib/sui/useHybridWallet";
+import { useTranslation } from "@/lib/useTranslation";
+import { useTheme } from "next-themes";
+import { LANGUAGES } from "@/lib/i18n";
+import { useEffect, useState } from "react";
 
 export type NavTab = "marketplace" | "investor" | "owner" | "how" | "architecture" | "secondary" | "dao" | "onboarding";
 
-const NAV_ITEMS: { id: NavTab; label: string }[] = [
-  { id: "marketplace", label: "Marketplace" },
-  { id: "investor", label: "Portfolio" },
-  { id: "owner", label: "Dashboard UMKM" },
-  { id: "secondary", label: "Sekunder" },
-  { id: "dao", label: "DAO Jury" },
-  { id: "onboarding", label: "Onboard UMKM" },
-  { id: "how", label: "Cara Kerja" },
-  { id: "architecture", label: "Arsitektur Sui" },
-];
+function useNavItems() {
+  const { t } = useTranslation();
+  return [
+    { id: "marketplace" as NavTab, label: t("nav.marketplace") },
+    { id: "investor" as NavTab, label: t("nav.portfolio") },
+    { id: "owner" as NavTab, label: t("nav.owner") },
+    { id: "secondary" as NavTab, label: t("nav.secondary") },
+    { id: "dao" as NavTab, label: t("nav.dao") },
+    { id: "onboarding" as NavTab, label: t("nav.onboarding") },
+    { id: "how" as NavTab, label: t("nav.how") },
+    { id: "architecture" as NavTab, label: t("nav.architecture") },
+  ];
+}
 
 export function Header() {
   const wallet = useAppStore((s) => s.wallet);
@@ -45,6 +56,17 @@ export function Header() {
   const activeTab = useAppStore((s) => s.activeTab);
   const setActiveTab = useAppStore((s) => s.setActiveTab);
   const { hasExtension, isRealWallet } = useHybridWallet();
+  const { t, lang, setLang } = useTranslation();
+  const NAV_ITEMS = useNavItems();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  // Mount flag — needed because next-themes theme is undefined on first SSR render.
+  // Use useLayoutEffect to set before paint, avoiding visible flash.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+  const isDark = mounted && theme === "dark";
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-lg">
@@ -69,12 +91,12 @@ export function Header() {
                 {isRealWallet ? (
                   <>
                     <Wifi className="h-2.5 w-2.5 text-emerald-500" />
-                    Sui Testnet · Live
+                    {t("header.liveTestnet")}
                   </>
                 ) : (
                   <>
                     <WifiOff className="h-2.5 w-2.5 text-amber-500" />
-                    Demo mode · Sui Testnet ready
+                    {t("header.demoMode")}
                   </>
                 )}
               </span>
@@ -98,8 +120,50 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Wallet */}
-          <div className="flex items-center gap-2">
+          {/* Theme toggle + Language switcher + Wallet */}
+          <div className="flex items-center gap-1.5">
+            {/* Theme toggle */}
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-9 w-9"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              aria-label={isDark ? t("header.themeLight") : t("header.themeDark")}
+              title={isDark ? t("header.themeLight") : t("header.themeDark")}
+            >
+              {mounted && (isDark ? (
+                <Sun className="h-4 w-4" />
+              ) : (
+                <Moon className="h-4 w-4" />
+              ))}
+            </Button>
+
+            {/* Language switcher */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon" className="h-9 w-9" aria-label={t("header.language")} title={t("header.language")}>
+                  <Languages className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuLabel className="text-xs text-muted-foreground">
+                  {t("header.language")}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {LANGUAGES.map((l) => (
+                  <DropdownMenuItem
+                    key={l.code}
+                    onClick={() => setLang(l.code)}
+                    className="gap-2 py-2"
+                  >
+                    <span className="text-base">{l.flag}</span>
+                    <span className="flex-1 text-sm">{l.native}</span>
+                    {lang === l.code && <Check className="h-3.5 w-3.5 text-primary" />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <AnimatePresence mode="wait">
               {wallet.connected ? (
                 <motion.div
@@ -111,11 +175,11 @@ export function Header() {
                 >
                   {/* Balance pill */}
                   <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/60 border border-border/60">
-                    <span className="text-xs font-medium text-muted-foreground">SUI</span>
+                    <span className="text-xs font-medium text-muted-foreground">{t("header.balanceSUI")}</span>
                     <span className="text-xs font-bold">{wallet.suiBalance.toFixed(2)}</span>
                   </div>
                   <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/60 border border-border/60">
-                    <span className="text-xs font-medium text-muted-foreground">IDR</span>
+                    <span className="text-xs font-medium text-muted-foreground">{t("header.balanceIDR")}</span>
                     <span className="text-xs font-bold">{formatIDR(wallet.idrBalance, { compact: true })}</span>
                   </div>
 
@@ -136,36 +200,36 @@ export function Header() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-64">
                       <DropdownMenuLabel className="flex flex-col gap-1">
-                        <span className="text-xs text-muted-foreground">Wallet terhubung</span>
+                        <span className="text-xs text-muted-foreground">{t("header.walletConnected")}</span>
                         <span className="text-xs font-mono break-all">{wallet.address}</span>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuLabel className="text-xs text-muted-foreground font-normal">
                         {wallet.viaZkLogin ? (
                           <span className="flex items-center gap-1.5 text-primary">
-                            <ShieldCheck className="h-3.5 w-3.5" /> zkLogin via {wallet.provider}
+                            <ShieldCheck className="h-3.5 w-3.5" /> {t("header.zkLoginVia")} {wallet.provider}
                           </span>
                         ) : (
                           <span className="flex items-center gap-1.5">
-                            <Wallet className="h-3.5 w-3.5" /> Ethos Wallet
+                            <Wallet className="h-3.5 w-3.5" /> {t("header.ethos")}
                           </span>
                         )}
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <div className="px-2 py-1.5 space-y-1.5">
                         <div className="flex justify-between text-xs">
-                          <span className="text-muted-foreground">Saldo SUI</span>
+                          <span className="text-muted-foreground">{t("header.saldoSUI")}</span>
                           <span className="font-medium">{formatSUI(wallet.suiBalance)}</span>
                         </div>
                         <div className="flex justify-between text-xs">
-                          <span className="text-muted-foreground">Saldo IDR</span>
+                          <span className="text-muted-foreground">{t("header.saldoIDR")}</span>
                           <span className="font-medium">{formatIDR(wallet.idrBalance)}</span>
                         </div>
                       </div>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={disconnectWallet} className="text-destructive focus:text-destructive">
                         <LogOut className="h-3.5 w-3.5 mr-2" />
-                        Putuskan koneksi
+                        {t("header.disconnect")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -181,27 +245,27 @@ export function Header() {
                     <DropdownMenuTrigger asChild>
                       <Button className="gap-2 h-9 shadow-glow-emerald">
                         <Zap className="h-3.5 w-3.5" />
-                        Hubungkan Wallet
+                        {t("header.connectWallet")}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-72">
                       <DropdownMenuLabel className="text-xs text-muted-foreground">
-                        Pilih metode login
+                        {t("header.chooseMethod")}
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={() => connectWallet("google")} className="gap-3 py-2.5">
                         <div className="h-7 w-7 rounded-full bg-white border flex items-center justify-center text-xs font-bold">G</div>
                         <div className="flex-1">
-                          <div className="text-sm font-medium">Google (zkLogin)</div>
-                          <div className="text-[10px] text-muted-foreground">Tanpa install wallet</div>
+                          <div className="text-sm font-medium">{t("header.google")}</div>
+                          <div className="text-[10px] text-muted-foreground">{t("header.googleDesc")}</div>
                         </div>
-                        <Badge variant="secondary" className="text-[9px]">Recommended</Badge>
+                        <Badge variant="secondary" className="text-[9px]">{t("header.recommended")}</Badge>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => connectWallet("twitch")} className="gap-3 py-2.5">
                         <div className="h-7 w-7 rounded-full bg-purple-100 border flex items-center justify-center text-xs font-bold">T</div>
                         <div className="flex-1">
-                          <div className="text-sm font-medium">Twitch (zkLogin)</div>
-                          <div className="text-[10px] text-muted-foreground">Untuk kreator konten</div>
+                          <div className="text-sm font-medium">{t("header.twitch")}</div>
+                          <div className="text-[10px] text-muted-foreground">{t("header.twitchDesc")}</div>
                         </div>
                       </DropdownMenuItem>
                       <DropdownMenuItem onClick={() => connectWallet("ethos")} className="gap-3 py-2.5">
@@ -209,8 +273,8 @@ export function Header() {
                           <Wallet className="h-3.5 w-3.5 text-primary" />
                         </div>
                         <div className="flex-1">
-                          <div className="text-sm font-medium">Ethos Wallet</div>
-                          <div className="text-[10px] text-muted-foreground">Wallet native Sui</div>
+                          <div className="text-sm font-medium">{t("header.ethos")}</div>
+                          <div className="text-[10px] text-muted-foreground">{t("header.ethosDesc")}</div>
                         </div>
                       </DropdownMenuItem>
                     </DropdownMenuContent>

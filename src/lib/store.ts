@@ -1,6 +1,20 @@
 import { create } from "zustand";
 import type { UMKM, Stream, InvestorPosition, WalletState, SecondaryListing, ProfitReportQueueItem, UMKMOnboardForm } from "./types";
 import { generateTxDigest } from "./format";
+import type { Language } from "./i18n";
+
+// ===== Language persistence (load initial from localStorage) =====
+const STORAGE_KEY_LANG = "sahamkita-lang";
+function getInitialLang(): Language {
+  if (typeof window === "undefined") return "id";
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY_LANG);
+    if (stored === "en" || stored === "id" || stored === "zh") return stored;
+  } catch {
+    // ignore
+  }
+  return "id";
+}
 
 // ===== MOCK DATA: UMKM Indonesia =====
 const MOCK_UMKM: UMKM[] = [
@@ -490,6 +504,10 @@ interface AppState {
   updateOnboardForm: (patch: Partial<UMKMOnboardForm>) => void;
   uploadWalrusDoc: (docType: "legal" | "financial") => Promise<{ success: boolean; blobId?: string }>;
   submitOnboard: () => { success: boolean; message: string; txDigest: string };
+
+  // Language
+  language: Language;
+  setLanguage: (lang: Language) => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -890,5 +908,18 @@ export const useAppStore = create<AppState>((set, get) => ({
       message: `UMKM "${f.name}" berhasil onboard. Mint NFT object + ${f.totalShares} share tokens dalam 1 PTB. Status: pending KYC verification.`,
       txDigest,
     };
+  },
+
+  // ===== Language =====
+  language: getInitialLang(),
+  setLanguage: (lang) => {
+    set({ language: lang });
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem(STORAGE_KEY_LANG, lang);
+      } catch {
+        // ignore
+      }
+    }
   },
 }));

@@ -27,6 +27,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 import { formatIDR, shortAddress } from "@/lib/format";
+import { useTranslation } from "@/lib/useTranslation";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -34,6 +35,7 @@ import { toast } from "sonner";
 export function DAOJury() {
   const daoQueue = useAppStore((s) => s.daoQueue);
   const voteOnReport = useAppStore((s) => s.voteOnReport);
+  const { t } = useTranslation();
 
   const [selectedReport, setSelectedReport] = useState<string | null>(null);
   const [voting, setVoting] = useState<"approve" | "reject" | null>(null);
@@ -43,7 +45,7 @@ export function DAOJury() {
     await new Promise((r) => setTimeout(r, 700));
     voteOnReport(reportId, vote);
     setVoting(null);
-    toast.success(`Vote ${vote === "approve" ? "approve" : "reject"} terkirim`, {
+    toast.success(`Vote ${vote} submitted`, {
       description: "Vote on-chain · tx 0x" + Math.random().toString(16).slice(2, 18),
     });
     setSelectedReport(null);
@@ -64,25 +66,25 @@ export function DAOJury() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">DAO Jury Dashboard</h2>
+            <h2 className="text-2xl font-bold tracking-tight">{t("dao.title")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-2">
               <Gavel className="h-3.5 w-3.5 text-primary" />
-              Verifikasi profit report UMKM · Bukti permanen di Walrus · Vote on-chain
+              {t("dao.subtitle")}
             </p>
           </div>
           <Badge variant="outline" className="gap-1.5 bg-accent/30 border-accent/50">
             <ShieldCheck className="h-3 w-3" />
-            Jury member
+            {t("dao.juryMember")}
           </Badge>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[
-            { label: "Antrian pending", value: `${stats.pending}`, icon: Clock, color: "text-amber-600", bg: "bg-amber-100" },
-            { label: "Approved bulan ini", value: `${stats.approved}`, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-100" },
-            { label: "Rejected", value: `${stats.rejected}`, icon: XCircle, color: "text-rose-600", bg: "bg-rose-100" },
-            { label: "Total disetujui", value: formatIDR(stats.totalValue, { compact: true }), icon: Users, color: "text-primary", bg: "bg-primary/10" },
+            { label: t("dao.pending"), value: `${stats.pending}`, icon: Clock, color: "text-amber-600", bg: "bg-amber-100" },
+            { label: t("dao.approved"), value: `${stats.approved}`, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-100" },
+            { label: t("dao.rejected"), value: `${stats.rejected}`, icon: XCircle, color: "text-rose-600", bg: "bg-rose-100" },
+            { label: t("dao.totalApproved"), value: formatIDR(stats.totalValue, { compact: true }), icon: Users, color: "text-primary", bg: "bg-primary/10" },
           ].map((stat) => (
             <Card key={stat.label} className="p-4">
               <div className={`h-9 w-9 rounded-lg ${stat.bg} flex items-center justify-center mb-2`}>
@@ -101,13 +103,9 @@ export function DAOJury() {
               <Gavel className="h-4 w-4 text-primary" />
             </div>
             <div className="flex-1 text-xs leading-relaxed">
-              <div className="font-semibold text-sm mb-1">Cara kerja DAO Jury</div>
+              <div className="font-semibold text-sm mb-1">{t("dao.howJuryWorksTitle")}</div>
               <p className="text-muted-foreground">
-                Setiap UMKM owner submit laporan profit bulanan beserta bukti (invoice, bank statement)
-                yang disimpan permanen di Walrus. 5 jury terpilih melakukan verifikasi dokumen + vote.
-                Kalau ≥3 approve → status <code className="font-mono text-emerald-600">approved</code> →
-                owner bisa trigger PTB distribusi profit. Kalau ≥3 reject → status <code className="font-mono text-rose-600">rejected</code> →
-                dispute escalation.
+                {t("dao.howJuryWorksBody")}
               </p>
             </div>
           </div>
@@ -115,7 +113,7 @@ export function DAOJury() {
 
         {/* Queue */}
         <div className="space-y-3">
-          <h3 className="text-base font-bold">Antrian Verifikasi Profit Report</h3>
+          <h3 className="text-base font-bold">{t("dao.queueTitle")}</h3>
           {daoQueue.map((item) => {
             const approvalPct = (item.juryApprovals / item.juryRequired) * 100;
             const rejectionPct = (item.juryRejections / item.juryRequired) * 100;
@@ -146,13 +144,13 @@ export function DAOJury() {
                         {item.status === "approved" && (
                           <Badge className="bg-emerald-500 text-white border-0 text-[10px] gap-1">
                             <CheckCircle2 className="h-2.5 w-2.5" />
-                            Approved
+                            {t("dao.approved")}
                           </Badge>
                         )}
                         {item.status === "rejected" && (
                           <Badge className="bg-rose-500 text-white border-0 text-[10px] gap-1">
                             <XCircle className="h-2.5 w-2.5" />
-                            Rejected
+                            {t("dao.rejected")}
                           </Badge>
                         )}
                       </div>
@@ -163,16 +161,16 @@ export function DAOJury() {
                           <span className="font-mono">{shortAddress(item.ownerAddress)}</span>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Amount: </span>
+                          <span className="text-muted-foreground">{t("secondary.amount")}: </span>
                           <span className="font-bold text-emerald-600">{formatIDR(item.amount, { compact: true })}</span>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Submitted: </span>
-                          <span>{submittedHoursAgo}h lalu</span>
+                          <span className="text-muted-foreground">{t("dao.submitted")}: </span>
+                          <span>{t("dao.hoursAgo", { n: submittedHoursAgo })}</span>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Required: </span>
-                          <span className="font-mono">{item.juryApprovals}/{item.juryRequired} approve</span>
+                          <span className="text-muted-foreground">{t("dao.required")} </span>
+                          <span className="font-mono">{item.juryApprovals}/{item.juryRequired} {t("dao.approveShort")}</span>
                         </div>
                       </div>
 
@@ -192,14 +190,14 @@ export function DAOJury() {
 
                       {item.userVote && (
                         <div className="mt-2 text-[11px] flex items-center gap-1">
-                          <span className="text-muted-foreground">Vote kamu:</span>
+                          <span className="text-muted-foreground">{t("dao.yourVote")}</span>
                           {item.userVote === "approve" ? (
                             <Badge variant="outline" className="text-[10px] gap-0.5 border-emerald-300 text-emerald-700 bg-emerald-50">
-                              <ThumbsUp className="h-2.5 w-2.5" /> Approved
+                              <ThumbsUp className="h-2.5 w-2.5" /> {t("dao.approve")}
                             </Badge>
                           ) : (
                             <Badge variant="outline" className="text-[10px] gap-0.5 border-rose-300 text-rose-700 bg-rose-50">
-                              <ThumbsDown className="h-2.5 w-2.5" /> Rejected
+                              <ThumbsDown className="h-2.5 w-2.5" /> {t("dao.reject")}
                             </Badge>
                           )}
                         </div>
@@ -215,7 +213,7 @@ export function DAOJury() {
                         className="gap-1.5"
                       >
                         <FileText className="h-3.5 w-3.5" />
-                        Review
+                        {t("dao.review")}
                       </Button>
                       {item.status === "pending" && !item.userVote && (
                         <div className="flex gap-2">
@@ -256,10 +254,10 @@ export function DAOJury() {
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <FileText className="h-5 w-5 text-primary" />
-                  Review Profit Report — {selected.umkmName}
+                  {t("dao.reviewTitle", { name: selected.umkmName })}
                 </DialogTitle>
                 <DialogDescription>
-                  Verifikasi bukti di Walrus · Vote approve atau reject
+                  {t("dao.reviewDesc")}
                 </DialogDescription>
               </DialogHeader>
 
@@ -267,11 +265,11 @@ export function DAOJury() {
                 {/* Report summary */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="rounded-lg bg-secondary/50 p-3">
-                    <div className="text-[10px] text-muted-foreground">Periode</div>
+                    <div className="text-[10px] text-muted-foreground">{t("dao.period")}</div>
                     <div className="text-sm font-bold">{selected.reportingMonth}</div>
                   </div>
                   <div className="rounded-lg bg-secondary/50 p-3">
-                    <div className="text-[10px] text-muted-foreground">Amount dilaporkan</div>
+                    <div className="text-[10px] text-muted-foreground">{t("dao.amountReported")}</div>
                     <div className="text-sm font-bold text-emerald-600">{formatIDR(selected.amount)}</div>
                   </div>
                   <div className="rounded-lg bg-secondary/50 p-3">
@@ -279,8 +277,8 @@ export function DAOJury() {
                     <div className="text-xs font-mono">{selected.ownerAddress}</div>
                   </div>
                   <div className="rounded-lg bg-secondary/50 p-3">
-                    <div className="text-[10px] text-muted-foreground">Submitted</div>
-                    <div className="text-sm font-bold">{Math.floor((Date.now() - selected.submittedAt) / (1000 * 60 * 60))}h lalu</div>
+                    <div className="text-[10px] text-muted-foreground">{t("dao.submitted")}</div>
+                    <div className="text-sm font-bold">{t("dao.hoursAgo", { n: Math.floor((Date.now() - selected.submittedAt) / (1000 * 60 * 60)) })}</div>
                   </div>
                 </div>
 
@@ -289,11 +287,11 @@ export function DAOJury() {
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
                       <Database className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-semibold">Bukti di Walrus Storage</span>
+                      <span className="text-sm font-semibold">{t("dao.walrusProof")}</span>
                     </div>
                     <Badge variant="outline" className="text-[10px] gap-1">
                       <ShieldCheck className="h-2.5 w-2.5" />
-                      Immutable
+                      {t("dao.immutable")}
                     </Badge>
                   </div>
 
@@ -301,43 +299,43 @@ export function DAOJury() {
                     <div className="flex justify-between items-center p-2 rounded-lg bg-background/60 border border-border/40">
                       <div className="flex items-center gap-2">
                         <FileText className="h-3.5 w-3.5 text-amber-600" />
-                        <span>Invoice + bank statement (PDF, 2.4 MB)</span>
+                        <span>{t("dao.invoice")}</span>
                       </div>
                       <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
-                        Lihat
+                        {t("dao.view")}
                         <ExternalLink className="h-3 w-3" />
                       </Button>
                     </div>
                     <div className="flex justify-between items-center p-2 rounded-lg bg-background/60 border border-border/40">
                       <div className="flex items-center gap-2">
                         <FileText className="h-3.5 w-3.5 text-amber-600" />
-                        <span>Laporan keuangan internal (Excel, 1.1 MB)</span>
+                        <span>{t("dao.financialReport")}</span>
                       </div>
                       <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
-                        Lihat
+                        {t("dao.view")}
                         <ExternalLink className="h-3 w-3" />
                       </Button>
                     </div>
                     <div className="flex justify-between items-center p-2 rounded-lg bg-background/60 border border-border/40">
                       <div className="flex items-center gap-2">
                         <FileText className="h-3.5 w-3.5 text-amber-600" />
-                        <span>Foto operasional (3 foto, 8.7 MB)</span>
+                        <span>{t("dao.operationalPhotos")}</span>
                       </div>
                       <Button variant="ghost" size="sm" className="h-7 gap-1 text-xs">
-                        Lihat
+                        {t("dao.view")}
                         <ExternalLink className="h-3 w-3" />
                       </Button>
                     </div>
                   </div>
 
                   <div className="mt-3 text-[10px] font-mono text-muted-foreground">
-                    Blob ID: {selected.walrusBlobId}
+                    {t("dao.blobId")} {selected.walrusBlobId}
                   </div>
                 </div>
 
                 {/* Jury status */}
                 <div className="rounded-xl border border-border/60 p-4">
-                  <div className="text-sm font-semibold mb-2">Status Jury (5 anggota)</div>
+                  <div className="text-sm font-semibold mb-2">{t("dao.juryStatus")}</div>
                   <div className="flex gap-2 mb-3">
                     {Array.from({ length: 5 }).map((_, i) => {
                       const hasApprove = i < selected.juryApprovals;
@@ -359,7 +357,7 @@ export function DAOJury() {
                     })}
                   </div>
                   <div className="text-[11px] text-muted-foreground">
-                    Butuh ≥3 approve untuk distribusi profit · Saat ini: {selected.juryApprovals} approve, {selected.juryRejections} reject
+                    {t("dao.needApprove", { a: selected.juryApprovals, r: selected.juryRejections })}
                   </div>
                 </div>
               </div>
@@ -368,7 +366,7 @@ export function DAOJury() {
                 <DialogFooter>
                   {selected.userVote ? (
                     <div className="text-xs text-muted-foreground w-full text-center">
-                      Kamu sudah vote: <span className="font-semibold">{selected.userVote}</span>
+                      You already voted: <span className="font-semibold">{selected.userVote}</span>
                     </div>
                   ) : (
                     <>
@@ -381,7 +379,7 @@ export function DAOJury() {
                         {voting === "reject" ? "Voting..." : (
                           <>
                             <ThumbsDown className="h-4 w-4" />
-                            Reject
+                            {t("dao.reject")}
                           </>
                         )}
                       </Button>
@@ -393,7 +391,7 @@ export function DAOJury() {
                         {voting === "approve" ? "Voting..." : (
                           <>
                             <ThumbsUp className="h-4 w-4" />
-                            Approve
+                            {t("dao.approve")}
                           </>
                         )}
                       </Button>
@@ -405,7 +403,7 @@ export function DAOJury() {
                 <DialogFooter>
                   <Badge className="bg-emerald-500 text-white border-0 gap-1 py-2">
                     <CheckCircle2 className="h-3.5 w-3.5" />
-                    Report disetujui · UMKM owner bisa distribute profit sekarang
+                    {t("dao.reportApproved")}
                   </Badge>
                 </DialogFooter>
               )}
@@ -413,7 +411,7 @@ export function DAOJury() {
                 <DialogFooter>
                   <Badge className="bg-rose-500 text-white border-0 gap-1 py-2">
                     <XCircle className="h-3.5 w-3.5" />
-                    Report ditolak · Dispute escalation aktif
+                    {t("dao.reportRejected")}
                   </Badge>
                 </DialogFooter>
               )}

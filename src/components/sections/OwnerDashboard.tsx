@@ -41,8 +41,10 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { useTranslation } from "@/lib/useTranslation";
 
 export function OwnerDashboard() {
+  const { t } = useTranslation();
   const wallet = useAppStore((s) => s.wallet);
   const umkms = useAppStore((s) => s.umkms);
   const positions = useAppStore((s) => s.positions);
@@ -61,10 +63,9 @@ export function OwnerDashboard() {
         <div className="container mx-auto max-w-2xl px-4 text-center">
           <Card className="p-12">
             <Store className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-xl font-bold mb-2">Wallet UMKM belum terhubung</h3>
+            <h3 className="text-xl font-bold mb-2">{t("investor.walletNotConnected")}</h3>
             <p className="text-sm text-muted-foreground">
-              Hubungkan wallet UMKM (via zkLogin Google/Ethos) di kanan atas untuk mengelola
-              distribusi profit ke investor.
+              Connect your MSME wallet (via zkLogin Google/Ethos) in top-right to manage profit distribution to investors.
             </p>
           </Card>
         </div>
@@ -85,15 +86,15 @@ export function OwnerDashboard() {
     setPhase("done");
 
     if (result.success) {
-      toast.success("Distribusi profit berhasil!", {
-        description: `${result.investorCount} investor menerima stream · Total ${formatIDR(result.totalDistributed, { compact: true })} · tx ${shortAddress(result.txDigest)}`,
+      toast.success(t("distribute.success"), {
+        description: `${result.investorCount} investors · ${formatIDR(result.totalDistributed, { compact: true })} · tx ${shortAddress(result.txDigest)}`,
       });
       setTimeout(() => {
         setPhase("idle");
         setSelectedDistributeUMKM(null);
       }, 2000);
     } else {
-      toast.error("Distribusi gagal");
+      toast.error("Distribution failed");
       setPhase("idle");
     }
   };
@@ -114,15 +115,15 @@ export function OwnerDashboard() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Dashboard UMKM Owner</h2>
+            <h2 className="text-2xl font-bold tracking-tight">{t("owner.title")}</h2>
             <p className="text-sm text-muted-foreground mt-0.5 flex items-center gap-2">
               <Store className="h-3.5 w-3.5 text-primary" />
-              {ownerUMKMs.length} UMKM dikelola · {shortAddress(wallet.address)}
+              {ownerUMKMs.length} {t("owner.umkmManaged")} · {shortAddress(wallet.address)}
             </p>
           </div>
           <Badge variant="outline" className="gap-1.5 bg-accent/30 border-accent/50 self-start">
             <ShieldCheck className="h-3 w-3" />
-            KYC verified owner
+            {t("owner.kycVerifiedOwner")}
           </Badge>
         </div>
 
@@ -130,29 +131,29 @@ export function OwnerDashboard() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
           {[
             {
-              label: "Total Revenue/bulan",
+              label: t("owner.totalRevenueMonth"),
               value: formatIDR(ownerUMKMs.reduce((a, u) => a + u.monthlyRevenue, 0), { compact: true }),
               icon: TrendingUp,
               bg: "bg-primary/10",
               color: "text-primary",
             },
             {
-              label: "Total Profit/bulan",
+              label: t("owner.totalProfitMonth"),
               value: formatIDR(ownerUMKMs.reduce((a, u) => a + u.monthlyProfit, 0), { compact: true }),
               icon: Droplets,
               bg: "bg-amber-100",
               color: "text-amber-600",
             },
             {
-              label: "Total Investor",
+              label: t("owner.totalInvestors"),
               value: `${ownerUMKMs.reduce((a, u) => a + Math.floor(u.totalShares * 0.18) + 12, 0)}`,
               icon: Users,
               bg: "bg-emerald-100",
               color: "text-emerald-600",
             },
             {
-              label: "Distribusi bulan ini",
-              value: ownerUMKMs.some((u) => u.profitDistributionDay <= new Date().getDate()) ? "Tertunda" : "Selesai",
+              label: t("owner.distributionThisMonth"),
+              value: ownerUMKMs.some((u) => u.profitDistributionDay <= new Date().getDate()) ? t("owner.pending") : t("owner.done"),
               icon: Calendar,
               bg: "bg-rose-100",
               color: "text-rose-600",
@@ -198,15 +199,15 @@ export function OwnerDashboard() {
                     {/* Metrics */}
                     <div className="grid grid-cols-3 gap-2 mb-4">
                       <div className="rounded-lg bg-secondary/50 p-2">
-                        <div className="text-[10px] text-muted-foreground">Revenue Jun</div>
+                        <div className="text-[10px] text-muted-foreground">{t("detail.revenue")}</div>
                         <div className="text-sm font-bold">{formatIDR(umkm.monthlyRevenue, { compact: true })}</div>
                       </div>
                       <div className="rounded-lg bg-secondary/50 p-2">
-                        <div className="text-[10px] text-muted-foreground">Profit Jun</div>
+                        <div className="text-[10px] text-muted-foreground">{t("detail.profit")}</div>
                         <div className="text-sm font-bold text-emerald-600">{formatIDR(umkm.monthlyProfit, { compact: true })}</div>
                       </div>
                       <div className="rounded-lg bg-secondary/50 p-2">
-                        <div className="text-[10px] text-muted-foreground">Investor</div>
+                        <div className="text-[10px] text-muted-foreground">{t("common.investors")}</div>
                         <div className="text-sm font-bold">{investorCount}</div>
                       </div>
                     </div>
@@ -248,13 +249,13 @@ export function OwnerDashboard() {
                   <div className="border-l border-border/40 bg-secondary/20 p-5 flex flex-col">
                     <div className="flex items-center gap-1.5 mb-2">
                       <Workflow className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-xs font-semibold">Distribusi Profit Berikutnya</span>
+                      <span className="text-xs font-semibold">{t("owner.distributionNext")}</span>
                     </div>
                     <div className="text-2xl font-bold mb-1">
                       {formatIDR(umkm.monthlyProfit, { compact: true })}
                     </div>
                     <div className="text-[11px] text-muted-foreground mb-4">
-                      Tgl {umkm.profitDistributionDay} setiap bulan · ke {investorCount} investor
+                      {t("owner.distributionEvery", { day: umkm.profitDistributionDay, n: investorCount })}
                     </div>
 
                     {/* Sui features used */}
@@ -279,11 +280,11 @@ export function OwnerDashboard() {
                         onClick={() => handleDistribute(umkm.id)}
                       >
                         <Sparkles className="h-4 w-4" />
-                        Distribusi Profit Sekarang
+                        {t("owner.distributeNow")}
                       </Button>
                       {userHoldsThis && (
                         <p className="text-[10px] text-muted-foreground text-center mt-2">
-                          💡 Kamu juga investor UMKM ini — stream-mu akan ter-update otomatis.
+                          {t("owner.youAreAlsoInvestor")}
                         </p>
                       )}
                     </div>
@@ -301,19 +302,19 @@ export function OwnerDashboard() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Workflow className="h-5 w-5 text-primary" />
-              Distribusi Profit — {selectedUMKM?.name}
+              {t("distribute.title", { name: selectedUMKM?.name ?? "" })}
             </DialogTitle>
             <DialogDescription>
-              Eksekusi PTB bulk untuk distribusi profit ke {selectedInvestorCount} investor via SuiStream primitive.
+              {t("distribute.desc", { n: selectedInvestorCount })}
             </DialogDescription>
           </DialogHeader>
 
           {/* Steps */}
           <div className="space-y-3 py-4">
             {[
-              { key: "uploading", label: "Upload bukti profit ke Walrus", desc: "Invoice + bank statement disimpan permanen, blob ID tercatat on-chain" },
-              { key: "verifying", label: "Verifikasi otomatis DAO jury", desc: "3 dari 5 jury approve distribusi (mock)" },
-              { key: "distributing", label: "Build & eksekusi PTB bulk", desc: `create_stream(${selectedInvestorCount}x) dalam 1 tx atomik` },
+              { key: "uploading", label: t("distribute.uploading"), desc: t("distribute.uploadingDesc") },
+              { key: "verifying", label: t("distribute.verifying"), desc: t("distribute.verifyingDesc") },
+              { key: "distributing", label: t("distribute.distributing"), desc: t("distribute.distributingDesc", { n: selectedInvestorCount }) },
             ].map((step, i) => {
               const order = ["uploading", "verifying", "distributing", "done"];
               const currentIdx = order.indexOf(phase);
@@ -371,12 +372,12 @@ export function OwnerDashboard() {
               <div className="flex items-start gap-2">
                 <CheckCircle2 className="h-5 w-5 text-emerald-600 flex-shrink-0 mt-0.5" />
                 <div className="flex-1">
-                  <div className="text-sm font-bold text-emerald-900">Distribusi selesai!</div>
+                  <div className="text-sm font-bold text-emerald-900">{t("distribute.success")}</div>
                   <div className="text-xs text-emerald-700 mt-1">
-                    {selectedInvestorCount} investor menerima stream. Total {formatIDR(selectedUMKM.monthlyProfit, { compact: true })} dialirkan ke wallet investor selama 30 hari ke depan.
+                    {t("distribute.successDesc", { n: selectedInvestorCount, amount: formatIDR(selectedUMKM.monthlyProfit, { compact: true }) })}
                   </div>
                   <div className="text-[10px] font-mono text-emerald-600 mt-2">
-                    tx digest: 0x{Math.random().toString(16).slice(2, 18)}...
+                    {t("distribute.tx")} 0x{Math.random().toString(16).slice(2, 18)}...
                   </div>
                 </div>
               </div>
@@ -389,7 +390,7 @@ export function OwnerDashboard() {
               onClick={handleClose}
               disabled={phase !== "idle" && phase !== "done"}
             >
-              {phase === "done" ? "Tutup" : "Batal"}
+              {phase === "done" ? t("distribute.close") : t("distribute.cancel")}
             </Button>
             {phase === "idle" && (
               <Button
@@ -397,7 +398,7 @@ export function OwnerDashboard() {
                 onClick={() => selectedUMKM && handleDistribute(selectedUMKM.id)}
               >
                 <ArrowRight className="h-4 w-4" />
-                Mulai Distribusi
+                {t("distribute.start")}
               </Button>
             )}
           </DialogFooter>

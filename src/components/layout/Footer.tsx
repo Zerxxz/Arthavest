@@ -3,9 +3,11 @@
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, Droplets, Github, Twitter, ExternalLink } from "lucide-react";
 import { useAppStore } from "@/lib/store";
+import { useTranslation } from "@/lib/useTranslation";
 
 export function Footer() {
   const setActiveTab = useAppStore((s) => s.setActiveTab);
+  const { t } = useTranslation();
 
   return (
     <footer className="mt-auto border-t border-border/60 bg-secondary/30">
@@ -20,22 +22,20 @@ export function Footer() {
               <div>
                 <div className="font-bold">SahamKita</div>
                 <div className="text-[10px] text-muted-foreground">
-                  powered by SuiStream · Sui Network
+                  {t("footer.tagline")}
                 </div>
               </div>
             </div>
             <p className="text-xs text-muted-foreground max-w-md leading-relaxed mb-4">
-              Platform kepemilikan fraksional UMKM Indonesia dengan distribusi profit via SuiStream
-              primitive. Dibangun untuk Sui Overflow Hackathon — kombinasi RWA marketplace + DeFi
-              money stream di atas Sui object-centric model.
+              {t("footer.desc")}
             </p>
             <div className="flex gap-2">
               <Badge variant="outline" className="gap-1 text-[10px]">
                 <Droplets className="h-2.5 w-2.5 text-primary" />
-                SuiStream Primitive
+                {t("footer.suiStreamPrimitive")}
               </Badge>
               <Badge variant="outline" className="gap-1 text-[10px]">
-                Sui Overflow 2025
+                {t("footer.suiOverflow")}
               </Badge>
             </div>
           </div>
@@ -43,7 +43,7 @@ export function Footer() {
           {/* Quick links */}
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
-              Produk
+              {t("footer.product")}
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
@@ -51,7 +51,7 @@ export function Footer() {
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setActiveTab("marketplace")}
                 >
-                  Marketplace UMKM
+                  {t("footer.marketplace")}
                 </button>
               </li>
               <li>
@@ -59,7 +59,7 @@ export function Footer() {
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setActiveTab("investor")}
                 >
-                  Portfolio Investor
+                  {t("footer.portfolio")}
                 </button>
               </li>
               <li>
@@ -67,7 +67,7 @@ export function Footer() {
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setActiveTab("owner")}
                 >
-                  Dashboard UMKM
+                  {t("footer.umkmDashboard")}
                 </button>
               </li>
               <li>
@@ -75,7 +75,7 @@ export function Footer() {
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setActiveTab("how")}
                 >
-                  Cara Kerja
+                  {t("footer.howItWorks")}
                 </button>
               </li>
               <li>
@@ -83,7 +83,7 @@ export function Footer() {
                   className="text-foreground hover:text-primary transition-colors"
                   onClick={() => setActiveTab("architecture")}
                 >
-                  Arsitektur Sui
+                  {t("footer.suiArch")}
                 </button>
               </li>
             </ul>
@@ -92,7 +92,7 @@ export function Footer() {
           {/* Resources */}
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-3">
-              Resources
+              {t("footer.resources")}
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
@@ -154,10 +154,10 @@ export function Footer() {
         {/* Bottom */}
         <div className="mt-8 pt-6 border-t border-border/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <p className="text-[11px] text-muted-foreground">
-            © 2025 SahamKita · Built for Sui Overflow Hackathon. Demo data — bukan investasi nyata.
+            {t("footer.copyright")}
           </p>
           <p className="text-[11px] text-muted-foreground font-mono">
-            Made with ☕ in Bandung · Move + Sui + Next.js
+            {t("footer.madeWith")}
           </p>
         </div>
       </div>

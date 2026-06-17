@@ -15,10 +15,12 @@ import {
 import { StreamVisualizer } from "@/components/stream/StreamVisualizer";
 import { useAppStore } from "@/lib/store";
 import { formatIDR } from "@/lib/format";
+import { useTranslation } from "@/lib/useTranslation";
 
 export function Hero() {
   const setActiveTab = useAppStore((s) => s.setActiveTab);
   const streams = useAppStore((s) => s.streams);
+  const { t } = useTranslation();
 
   const visualizerStreams = streams.map((s) => ({
     id: s.id,
@@ -49,25 +51,20 @@ export function Hero() {
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-primary"></span>
               </span>
               <span className="text-xs font-semibold">
-                Built for Sui Overflow Hackathon
+                {t("hero.hackathonBadge")}
               </span>
             </Badge>
 
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.05]">
-                Investasi UMKM Indonesia.
+                {t("hero.titleLine1")}
                 <br />
-                <span className="text-gradient-emerald">Profit mengalir</span>{" "}
-                <span className="text-gradient-amber">per detik.</span>
+                <span className="text-gradient-emerald">{t("hero.titleLine2")}</span>{" "}
+                <span className="text-gradient-amber">{t("hero.titleLine3")}</span>
               </h1>
 
               <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-                SahamKita memungkinkanmu punya &ldquo;saham&rdquo; warung kopi, laundry, atau
-                catering langgananmu mulai dari{" "}
-                <span className="font-semibold text-foreground">Rp 50.000</span>. Profit bulanan
-                UMKM otomatis mengalir ke wallet-mu via{" "}
-                <span className="font-semibold text-foreground">SuiStream primitive</span> —
-                zero platform fee, zero manual transfer, atomic.
+                {t("hero.subtitle")}
               </p>
             </div>
 
@@ -78,7 +75,7 @@ export function Hero() {
                 className="gap-2 h-12 px-6 shadow-glow-emerald"
                 onClick={() => setActiveTab("marketplace")}
               >
-                Jelajahi UMKM
+                {t("hero.explore")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <Button
@@ -88,17 +85,17 @@ export function Hero() {
                 onClick={() => setActiveTab("how")}
               >
                 <PlayCircle className="h-4 w-4" />
-                Cara Kerja
+                {t("hero.howItWorks")}
               </Button>
             </div>
 
             {/* Trust badges */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
               {[
-                { icon: Users, label: "6 UMKM", sublabel: "terverifikasi" },
-                { icon: Droplets, label: "47-312", sublabel: "investor per UMKM" },
-                { icon: TrendingUp, label: "18-23%", sublabel: "estimasi APY" },
-                { icon: ShieldCheck, label: "zkLogin", sublabel: "no wallet needed" },
+                { icon: Users, label: "6", sublabel: t("hero.umkmVerified") },
+                { icon: Droplets, label: "47-312", sublabel: t("hero.investorsPer") },
+                { icon: TrendingUp, label: "18-23%", sublabel: t("hero.estimatedAPY") },
+                { icon: ShieldCheck, label: "zkLogin", sublabel: t("hero.noWalletNeeded") },
               ].map((stat, i) => (
                 <motion.div
                   key={stat.label}
@@ -127,10 +124,10 @@ export function Hero() {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     <Droplets className="h-4 w-4 text-primary" />
-                    <span className="text-sm font-semibold">SuiStream · Live</span>
+                    <span className="text-sm font-semibold">{t("hero.streamLive")}</span>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Profit stream aktif dari portfolio-mu
+                    {t("hero.activeProfitStreams")}
                   </p>
                 </div>
                 <Badge variant="secondary" className="gap-1 bg-primary/10 text-primary border-primary/20">
@@ -138,7 +135,7 @@ export function Hero() {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75"></span>
                     <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary"></span>
                   </span>
-                  Streaming
+                  {t("hero.streaming")}
                 </Badge>
               </div>
 
@@ -148,7 +145,7 @@ export function Hero() {
 
               <div className="grid grid-cols-3 gap-3 mt-4">
                 <div className="rounded-xl bg-background/50 p-3 border border-border/40">
-                  <div className="text-[10px] text-muted-foreground mb-1">Akumulasi harian</div>
+                  <div className="text-[10px] text-muted-foreground mb-1">{t("hero.dailyAccrual")}</div>
                   <div className="text-sm font-bold text-primary">
                     {formatIDR(
                       streams.reduce((acc, s) => acc + s.ratePerSecond * 86400, 0),
@@ -157,14 +154,14 @@ export function Hero() {
                   </div>
                 </div>
                 <div className="rounded-xl bg-background/50 p-3 border border-border/40">
-                  <div className="text-[10px] text-muted-foreground mb-1">Stream aktif</div>
+                  <div className="text-[10px] text-muted-foreground mb-1">{t("hero.activeStreams")}</div>
                   <div className="text-sm font-bold">{streams.length}</div>
                 </div>
                 <div className="rounded-xl bg-background/50 p-3 border border-border/40">
-                  <div className="text-[10px] text-muted-foreground mb-1">PTB tx</div>
+                  <div className="text-[10px] text-muted-foreground mb-1">{t("hero.ptbTx")}</div>
                   <div className="text-sm font-bold flex items-center gap-1">
                     <Zap className="h-3 w-3 text-amber-500" />
-                    Atomic
+                    {t("hero.atomic")}
                   </div>
                 </div>
               </div>
