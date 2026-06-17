@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>SahamKita — Roadmap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">
+  <style>
+    .timeline-wrap { position: relative; margin-top: 18px; padding-top: 28px; }
+    .timeline-line {
+      position: absolute; top: 14px; left: 4%; right: 4%;
+      height: 0; border-top: 2px dotted var(--primary);
+      opacity: 0.55;
+    }
+    .timeline-dot {
+      position: absolute; top: 8px;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--bg);
+      border: 3px solid var(--primary);
+      transform: translateX(-50%);
+      z-index: 2;
+    }
+    .timeline-dot.amber { border-color: var(--accent-dark); }
+    .ms-card { padding: 14px 14px 14px; display: flex; flex-direction: column; gap: 8px; height: 100%; }
+    .ms-quarter {
+      font-family: var(--font-num); font-size: 11px; font-weight: 600;
+      color: var(--ink-3); letter-spacing: 0.05em;
+    }
+    .ms-title {
+      font-family: var(--font-heading); font-weight: 700; font-size: 16px;
+      color: var(--ink); line-height: 1.2;
+    }
+    .ms-bullets { display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+    .ms-bullets li {
+      font-family: var(--font-body); font-weight: 400; font-size: 11.5px;
+      color: var(--ink-2); line-height: 1.45;
+      padding-left: 12px; position: relative;
+    }
+    .ms-bullets li::before {
+      content: ''; position: absolute; left: 0; top: 7px;
+      width: 4px; height: 4px; border-radius: 50%;
+      background: var(--primary);
+    }
+    .ms-bullets.amber li::before { background: var(--accent-dark); }
+    .metric-strip { display: flex; gap: 14px; margin-top: 14px; }
+    .metric-pill {
+      flex: 1; background: var(--bg-2); border: 1px solid var(--border);
+      border-radius: 12px; padding: 10px 14px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .metric-strip .num {
+      font-family: var(--font-num); font-weight: 700; font-size: 22px; line-height: 1;
+    }
+    .metric-strip .lbl {
+      font-family: var(--font-body); font-size: 11.5px; color: var(--ink-3); line-height: 1.3;
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <!-- Header -->
+    <div class="flex items-start justify-between">
+      <div style="max-width: 760px;">
+        <div class="eyebrow">ROADMAP</div>
+        <h1 class="font-heading text-ink" style="font-weight:700; font-size:36px; line-height:1.15; letter-spacing:-0.01em;">
+          Dari hackathon ini ke mainnet dalam 6 bulan.
+        </h1>
+        <p class="font-body text-ink-3" style="font-size:13.5px; line-height:1.55; margin-top:8px; max-width:760px;">
+          SahamKita sudah punya MVP lengkap dengan 5 alur. Setelah Sui Overflow, kita deploy ke testnet publik, onboarding UMKM pilot, lalu mainnet dengan DAO jury aktif.
+        </p>
+      </div>
+      <div class="flex flex-col items-end gap-1" style="padding-top:4px;">
+        <span class="pill pill-emerald"><i class="material-icons" style="font-size:13px;">rocket_launch</i>6 BULAN KE MAINNET</span>
+        <span class="font-num text-ink-4" style="font-size:10.5px; letter-spacing:0.05em;">Q3 2025 → Q2 2026</span>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline-wrap">
+      <div class="timeline-line"></div>
+      <div class="timeline-dot" style="left: 12.5%;"></div>
+      <div class="timeline-dot amber" style="left: 37.5%;"></div>
+      <div class="timeline-dot" style="left: 62.5%;"></div>
+      <div class="timeline-dot amber" style="left: 87.5%;"></div>
+
+      <div class="grid grid-cols-4 gap-3" style="margin-top:6px;">
+        <!-- Milestone 1 -->
+        <div class="card ms-card" style="border-top: 3px solid var(--primary);">
+          <div class="flex items-center justify-between">
+            <span class="ms-quarter">Q3 2025</span>
+            <span class="pill pill-emerald" style="font-size:9.5px; padding:3px 8px;">NOW</span>
+          </div>
+          <div class="ms-title">Hackathon MVP</div>
+          <ul class="ms-bullets">
+            <li>5 alur lengkap (marketplace, portfolio, owner, secondary, DAO)</li>
+            <li>Move contracts (stream.move + saham_kita.move) — belum published</li>
+            <li>Demo data 6 UMKM</li>
+            <li>zkLogin mock</li>
+          </ul>
+        </div>
+
+        <!-- Milestone 2 -->
+        <div class="card ms-card" style="border-top: 3px solid var(--accent-dark);">
+          <div class="flex items-center justify-between">
+            <span class="ms-quarter">Q4 2025</span>
+            <span class="pill pill-amber" style="font-size:9.5px; padding:3px 8px;">NEXT</span>
+          </div>
+          <div class="ms-title">Testnet Public Launch</div>
+          <ul class="ms-bullets amber">
+            <li>Publish Move contracts ke Sui testnet</li>
+            <li>Real @mysten/dapp-kit integration (sudah siap di code)</li>
+            <li>Real Walrus upload untuk dokumen UMKM</li>
+            <li>10 UMKM pilot onboarded (Bandung area)</li>
+          </ul>
+        </div>
+
+        <!-- Milestone 3 -->
+        <div class="card ms-card" style="border-top: 3px solid var(--primary);">
+          <div class="flex items-center justify-between">
+            <span class="ms-quarter">Q1 2026</span>
+            <span class="pill pill-emerald" style="font-size:9.5px; padding:3px 8px;">MAINNET</span>
+          </div>
+          <div class="ms-title">Sui Mainnet Launch</div>
+          <ul class="ms-bullets">
+            <li>DAO jury aktif (5 jury terpilih)</li>
+            <li>DeepBook secondary market live</li>
+            <li>Onboarding 100 UMKM (target)</li>
+            <li>Integrasi payment on-ramp (IDR → SUI)</li>
+          </ul>
+        </div>
+
+        <!-- Milestone 4 -->
+        <div class="card ms-card" style="border-top: 3px solid var(--accent-dark);">
+          <div class="flex items-center justify-between">
+            <span class="ms-quarter">Q2 2026</span>
+            <span class="pill pill-amber" style="font-size:9.5px; padding:3px 8px;">EXPANSION</span>
+          </div>
+          <div class="ms-title">SEA Expansion</div>
+          <ul class="ms-bullets amber">
+            <li>Vietnam &amp; Filipina pilot</li>
+            <li>Mobile app (React Native + dapp-kit)</li>
+            <li>SuiStream primitive packaged sebagai SDK open-source</li>
+            <li>Partnership dengan koperasi UMKM nasional</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Metrics strip -->
+    <div class="metric-strip">
+      <div class="metric-pill">
+        <i class="material-icons" style="color:var(--primary); font-size:22px;">schedule</i>
+        <div>
+          <div class="num" style="color:var(--ink);">6 bulan</div>
+          <div class="lbl">dari hackathon ke mainnet</div>
+        </div>
+      </div>
+      <div class="metric-pill">
+        <i class="material-icons" style="color:var(--accent-dark); font-size:22px;">savings</i>
+        <div>
+          <div class="num" style="color:var(--accent-dark);">&lt; $50K</div>
+          <div class="lbl">estimated launch cost (gas + audit)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="slide-footer">
+      <span>SahamKita · Sui Overflow 2025</span>
+      <span class="font-num">Slide 07 / 08</span>
+    </div>
+  </div>
+
+  <aside data-notes style="display:none;">
+    <ul>
+      <li>Tekankan MVP sudah substantial: 5 alur lengkap, bukan slide demo.</li>
+      <li>Q4 2025 publish ke testnet — kontrak Move siap, dapp-kit integration sudah di code.</li>
+      <li>Q1 2026 mainnet dengan DAO jury + DeepBook live — model distribusi profit terbukti.</li>
+      <li>SuiStream SDK open-source di Q2 2026 akan tarik ecosystem builder lain.</li>
+      <li>Cost ke mainnet &lt; $50K (gas + audit) — angka realistis untuk bootstrap.</li>
+    </ul>
+  </aside>
+</body>
+</html>

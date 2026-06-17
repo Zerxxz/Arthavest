@@ -18,14 +18,22 @@ import {
   Sparkles,
   ShieldCheck,
   Zap,
+  Wifi,
+  WifiOff,
 } from "lucide-react";
 import { shortAddress, formatIDR, formatSUI } from "@/lib/format";
 import { motion, AnimatePresence } from "framer-motion";
+import { useHybridWallet } from "@/lib/sui/useHybridWallet";
 
-const NAV_ITEMS: { id: "marketplace" | "investor" | "owner" | "how" | "architecture"; label: string }[] = [
+export type NavTab = "marketplace" | "investor" | "owner" | "how" | "architecture" | "secondary" | "dao" | "onboarding";
+
+const NAV_ITEMS: { id: NavTab; label: string }[] = [
   { id: "marketplace", label: "Marketplace" },
   { id: "investor", label: "Portfolio" },
   { id: "owner", label: "Dashboard UMKM" },
+  { id: "secondary", label: "Sekunder" },
+  { id: "dao", label: "DAO Jury" },
+  { id: "onboarding", label: "Onboard UMKM" },
   { id: "how", label: "Cara Kerja" },
   { id: "architecture", label: "Arsitektur Sui" },
 ];
@@ -36,6 +44,7 @@ export function Header() {
   const disconnectWallet = useAppStore((s) => s.disconnectWallet);
   const activeTab = useAppStore((s) => s.activeTab);
   const setActiveTab = useAppStore((s) => s.setActiveTab);
+  const { hasExtension, isRealWallet } = useHybridWallet();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-lg">
@@ -56,19 +65,29 @@ export function Header() {
             </div>
             <div className="flex flex-col items-start leading-none">
               <span className="text-base font-bold tracking-tight">SahamKita</span>
-              <span className="text-[10px] text-muted-foreground font-medium">
-                powered by SuiStream · Sui
+              <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1">
+                {isRealWallet ? (
+                  <>
+                    <Wifi className="h-2.5 w-2.5 text-emerald-500" />
+                    Sui Testnet · Live
+                  </>
+                ) : (
+                  <>
+                    <WifiOff className="h-2.5 w-2.5 text-amber-500" />
+                    Demo mode · Sui Testnet ready
+                  </>
+                )}
               </span>
             </div>
           </button>
 
           {/* Nav (desktop) */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-1">
             {NAV_ITEMS.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   activeTab === item.id
                     ? "bg-primary/10 text-primary"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted"
@@ -203,7 +222,7 @@ export function Header() {
         </div>
 
         {/* Mobile nav */}
-        <nav className="md:hidden flex items-center gap-1 overflow-x-auto scrollbar-warm pb-2 -mx-1 px-1">
+        <nav className="lg:hidden flex items-center gap-1 overflow-x-auto scrollbar-warm pb-2 -mx-1 px-1">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}

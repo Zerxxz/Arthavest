@@ -9,6 +9,9 @@ import { Marketplace } from "@/components/sections/Marketplace";
 import { InvestorDashboard } from "@/components/sections/InvestorDashboard";
 import { OwnerDashboard } from "@/components/sections/OwnerDashboard";
 import { Architecture } from "@/components/sections/Architecture";
+import { SecondaryMarket } from "@/components/sections/secondary/SecondaryMarket";
+import { DAOJury } from "@/components/sections/dao/DAOJury";
+import { OnboardingUMKM } from "@/components/sections/onboarding/OnboardingUMKM";
 import { AnimatePresence, motion } from "framer-motion";
 import { Toaster as SonnerToaster } from "sonner";
 import { useEffect } from "react";
@@ -23,7 +26,6 @@ export default function Home() {
   useEffect(() => {
     if (!walletConnected) {
       // Auto-connect via zkLogin Google for demo purposes
-      // (so investor & owner dashboards are immediately explorable)
       const timer = setTimeout(() => connectWallet("google"), 800);
       return () => clearTimeout(timer);
     }
@@ -51,6 +53,9 @@ export default function Home() {
             {activeTab === "how" && <HowItWorks />}
             {activeTab === "investor" && <InvestorDashboard />}
             {activeTab === "owner" && <OwnerDashboard />}
+            {activeTab === "secondary" && <SecondaryMarket />}
+            {activeTab === "dao" && <DAOJury />}
+            {activeTab === "onboarding" && <OnboardingUMKM />}
             {activeTab === "architecture" && <Architecture />}
           </motion.div>
         </AnimatePresence>

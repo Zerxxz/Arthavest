@@ -87,3 +87,64 @@ export interface SuiFeature {
   usedIn: string;
   benefit: string;
 }
+
+// ===== Secondary Market (DeepBook) =====
+export interface SecondaryListing {
+  id: string;
+  umkmId: string;
+  umkmName: string;
+  umkmEmoji: string;
+  umkmGradient: string;
+  sellerAddress: string;
+  shares: number;
+  pricePerShare: number;
+  // DeepBook pool data
+  bestBid: number;
+  bestAsk: number;
+  dailyVolume: number;
+  spread: number; // in IDR
+  // Price history for sparkline (24h)
+  priceHistory: { t: number; p: number }[];
+}
+
+// ===== DAO Jury Queue =====
+export interface ProfitReportQueueItem {
+  id: string;
+  umkmId: string;
+  umkmName: string;
+  umkmEmoji: string;
+  umkmGradient: string;
+  ownerAddress: string;
+  amount: number;
+  reportingMonth: string;
+  // Walrus proof
+  walrusBlobId: string;
+  // Votes
+  juryApprovals: number;
+  juryRejections: number;
+  juryRequired: number;
+  // Current user vote
+  userVote: "approve" | "reject" | null;
+  // Status
+  status: "pending" | "approved" | "rejected";
+  submittedAt: number;
+}
+
+// ===== UMKM Onboarding Form =====
+export interface UMKMOnboardForm {
+  name: string;
+  tagline: string;
+  category: UMKMCategory;
+  location: string;
+  description: string;
+  monthlyRevenue: number;
+  monthlyProfit: number;
+  valuation: number;
+  totalShares: number;
+  pricePerShare: number;
+  // Walrus upload
+  legalDocStatus: "idle" | "uploading" | "uploaded" | "error";
+  legalDocBlobId: string | null;
+  financialDocStatus: "idle" | "uploading" | "uploaded" | "error";
+  financialDocBlobId: string | null;
+}

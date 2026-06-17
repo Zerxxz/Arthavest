@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { UMKM, Stream, InvestorPosition, WalletState } from "./types";
+import type { UMKM, Stream, InvestorPosition, WalletState, SecondaryListing, ProfitReportQueueItem, UMKMOnboardForm } from "./types";
 import { generateTxDigest } from "./format";
 
 // ===== MOCK DATA: UMKM Indonesia =====
@@ -280,6 +280,172 @@ function buildInitialStreams(): Stream[] {
   ];
 }
 
+// ===== MOCK: Secondary market (DeepBook) listings =====
+function buildInitialListings(): SecondaryListing[] {
+  // Generate 24h price history (24 points, hourly)
+  const generatePriceHistory = (basePrice: number, volatility: number) => {
+    const history: { t: number; p: number }[] = [];
+    const now = Date.now();
+    for (let i = 23; i >= 0; i--) {
+      const t = now - i * 60 * 60 * 1000;
+      const drift = (Math.random() - 0.5) * volatility;
+      const p = basePrice * (1 + drift / 100);
+      history.push({ t, p: Math.round(p) });
+    }
+    return history;
+  };
+
+  return [
+    {
+      id: "listing-001",
+      umkmId: "umkm-001",
+      umkmName: "Kopi Senja",
+      umkmEmoji: "☕",
+      umkmGradient: "from-amber-200 via-orange-300 to-rose-300",
+      sellerAddress: "0x7a3f...e2b1",
+      shares: 8,
+      pricePerShare: 1_080_000,
+      bestBid: 1_050_000,
+      bestAsk: 1_080_000,
+      dailyVolume: 4_320_000,
+      spread: 30_000,
+      priceHistory: generatePriceHistory(1_060_000, 4),
+    },
+    {
+      id: "listing-002",
+      umkmId: "umkm-001",
+      umkmName: "Kopi Senja",
+      umkmEmoji: "☕",
+      umkmGradient: "from-amber-200 via-orange-300 to-rose-300",
+      sellerAddress: "0xb2c5...f9a3",
+      shares: 5,
+      pricePerShare: 1_095_000,
+      bestBid: 1_050_000,
+      bestAsk: 1_095_000,
+      dailyVolume: 4_320_000,
+      spread: 45_000,
+      priceHistory: generatePriceHistory(1_060_000, 4),
+    },
+    {
+      id: "listing-003",
+      umkmId: "umkm-002",
+      umkmName: "Warung Bu Tini",
+      umkmEmoji: "🍱",
+      umkmGradient: "from-rose-200 via-red-300 to-orange-300",
+      sellerAddress: "0x4d8e...c1f7",
+      shares: 12,
+      pricePerShare: 980_000,
+      bestBid: 950_000,
+      bestAsk: 980_000,
+      dailyVolume: 2_860_000,
+      spread: 30_000,
+      priceHistory: generatePriceHistory(965_000, 5),
+    },
+    {
+      id: "listing-004",
+      umkmId: "umkm-004",
+      umkmName: "Bakso Pak Joko",
+      umkmEmoji: "🍲",
+      umkmGradient: "from-orange-200 via-amber-300 to-yellow-300",
+      sellerAddress: "0xe6a1...d4c8",
+      shares: 20,
+      pricePerShare: 1_120_000,
+      bestBid: 1_100_000,
+      bestAsk: 1_120_000,
+      dailyVolume: 6_540_000,
+      spread: 20_000,
+      priceHistory: generatePriceHistory(1_110_000, 3),
+    },
+    {
+      id: "listing-005",
+      umkmId: "umkm-005",
+      umkmName: "Keripik Tempe Ibu Sum",
+      umkmEmoji: "🥬",
+      umkmGradient: "from-lime-200 via-green-300 to-emerald-300",
+      sellerAddress: "0x9f3b...a2e5",
+      shares: 15,
+      pricePerShare: 1_050_000,
+      bestBid: 1_020_000,
+      bestAsk: 1_050_000,
+      dailyVolume: 1_920_000,
+      spread: 30_000,
+      priceHistory: generatePriceHistory(1_035_000, 6),
+    },
+  ];
+}
+
+// ===== MOCK: DAO Jury profit report queue =====
+const INITIAL_DAO_QUEUE: ProfitReportQueueItem[] = [
+  {
+    id: "report-001",
+    umkmId: "umkm-001",
+    umkmName: "Kopi Senja",
+    umkmEmoji: "☕",
+    umkmGradient: "from-amber-200 via-orange-300 to-rose-300",
+    ownerAddress: "0x7a3f...e2b1",
+    amount: 28_000_000,
+    reportingMonth: "Juni 2025",
+    walrusBlobId: "walrus_p3k7bn...q5r2",
+    juryApprovals: 3,
+    juryRejections: 0,
+    juryRequired: 5,
+    userVote: null,
+    status: "pending",
+    submittedAt: Date.now() - 1000 * 60 * 60 * 8, // 8h ago
+  },
+  {
+    id: "report-002",
+    umkmId: "umkm-002",
+    umkmName: "Warung Bu Tini",
+    umkmEmoji: "🍱",
+    umkmGradient: "from-rose-200 via-red-300 to-orange-300",
+    ownerAddress: "0x4d8e...c1f7",
+    amount: 19_500_000,
+    reportingMonth: "Juni 2025",
+    walrusBlobId: "walrus_m2z4qr...n8t1",
+    juryApprovals: 4,
+    juryRejections: 1,
+    juryRequired: 5,
+    userVote: null,
+    status: "pending",
+    submittedAt: Date.now() - 1000 * 60 * 60 * 14, // 14h ago
+  },
+  {
+    id: "report-003",
+    umkmId: "umkm-004",
+    umkmName: "Bakso Pak Joko",
+    umkmEmoji: "🍲",
+    umkmGradient: "from-orange-200 via-amber-300 to-yellow-300",
+    ownerAddress: "0xe6a1...d4c8",
+    amount: 14_800_000,
+    reportingMonth: "Juni 2025",
+    walrusBlobId: "walrus_k9p2lm...t6w8",
+    juryApprovals: 5,
+    juryRejections: 0,
+    juryRequired: 5,
+    userVote: null,
+    status: "approved",
+    submittedAt: Date.now() - 1000 * 60 * 60 * 26, // 26h ago
+  },
+  {
+    id: "report-004",
+    umkmId: "umkm-005",
+    umkmName: "Keripik Tempe Ibu Sum",
+    umkmEmoji: "🥬",
+    umkmGradient: "from-lime-200 via-green-300 to-emerald-300",
+    ownerAddress: "0x9f3b...a2e5",
+    amount: 9_800_000,
+    reportingMonth: "Juni 2025",
+    walrusBlobId: "walrus_j4f7qr...b2m9",
+    juryApprovals: 1,
+    juryRejections: 2,
+    juryRequired: 5,
+    userVote: null,
+    status: "pending",
+    submittedAt: Date.now() - 1000 * 60 * 60 * 3, // 3h ago
+  },
+];
+
 // ===== ZUSTAND STORE =====
 interface AppState {
   // Wallet
@@ -301,14 +467,29 @@ interface AppState {
   distributeProfits: (umkmId: string) => { success: boolean; txDigest: string; investorCount: number; totalDistributed: number };
 
   // UI state
-  activeTab: "marketplace" | "investor" | "owner" | "how" | "architecture";
-  setActiveTab: (tab: "marketplace" | "investor" | "owner" | "how" | "architecture") => void;
+  activeTab: "marketplace" | "investor" | "owner" | "how" | "architecture" | "secondary" | "dao" | "onboarding";
+  setActiveTab: (tab: "marketplace" | "investor" | "owner" | "how" | "architecture" | "secondary" | "dao" | "onboarding") => void;
   selectedUMKMId: string | null;
   setSelectedUMKM: (id: string | null) => void;
   buyModalOpen: boolean;
   setBuyModalOpen: (open: boolean) => void;
   distributeModalOpen: boolean;
   setDistributeModalOpen: (open: boolean) => void;
+
+  // Secondary market (DeepBook)
+  listings: SecondaryListing[];
+  buyFromListing: (listingId: string) => { success: boolean; message: string; txDigest: string };
+  createListing: (umkmId: string, shares: number, pricePerShare: number) => { success: boolean; message: string };
+
+  // DAO Jury
+  daoQueue: ProfitReportQueueItem[];
+  voteOnReport: (reportId: string, vote: "approve" | "reject") => void;
+
+  // UMKM Onboarding
+  onboardForm: UMKMOnboardForm;
+  updateOnboardForm: (patch: Partial<UMKMOnboardForm>) => void;
+  uploadWalrusDoc: (docType: "legal" | "financial") => Promise<{ success: boolean; blobId?: string }>;
+  submitOnboard: () => { success: boolean; message: string; txDigest: string };
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -501,4 +682,213 @@ export const useAppStore = create<AppState>((set, get) => ({
   setBuyModalOpen: (open) => set({ buyModalOpen: open }),
   distributeModalOpen: false,
   setDistributeModalOpen: (open) => set({ distributeModalOpen: open }),
+
+  // ===== Secondary market =====
+  listings: buildInitialListings(),
+
+  buyFromListing: (listingId) => {
+    const state = get();
+    const listing = state.listings.find((l) => l.id === listingId);
+    if (!listing) return { success: false, message: "Listing tidak ditemukan", txDigest: "" };
+    const cost = listing.shares * listing.pricePerShare;
+    if (cost > state.wallet.idrBalance) {
+      return { success: false, message: `Saldo IDR tidak cukup (butuh ${cost.toLocaleString("id-ID")})`, txDigest: "" };
+    }
+    // Remove listing
+    set((s) => ({
+      listings: s.listings.filter((l) => l.id !== listingId),
+      wallet: { ...s.wallet, idrBalance: s.wallet.idrBalance - cost },
+      positions: (() => {
+        const existing = s.positions.find((p) => p.umkmId === listing.umkmId);
+        if (existing) {
+          return s.positions.map((p) =>
+            p.umkmId === listing.umkmId
+              ? {
+                  ...p,
+                  sharesOwned: p.sharesOwned + listing.shares,
+                  totalInvested: p.totalInvested + cost,
+                  avgBuyPrice: (p.totalInvested + cost) / (p.sharesOwned + listing.shares),
+                }
+              : p,
+          );
+        }
+        return [
+          ...s.positions,
+          {
+            umkmId: listing.umkmId,
+            sharesOwned: listing.shares,
+            avgBuyPrice: listing.pricePerShare,
+            totalInvested: cost,
+            totalWithdrawn: 0,
+          },
+        ];
+      })(),
+    }));
+    return {
+      success: true,
+      message: `Beli ${listing.shares} saham ${listing.umkmName} dari secondary market via DeepBook. Atomic match di orderbook.`,
+      txDigest: generateTxDigest(),
+    };
+  },
+
+  createListing: (umkmId, shares, pricePerShare) => {
+    const state = get();
+    const umkm = state.umkms.find((u) => u.id === umkmId);
+    if (!umkm) return { success: false, message: "UMKM tidak ditemukan" };
+    const userPos = state.positions.find((p) => p.umkmId === umkmId);
+    if (!userPos || userPos.sharesOwned < shares) {
+      return { success: false, message: "Saham tidak cukup di portfolio" };
+    }
+    // Generate price history (24h random walk starting at listing price)
+    const priceHistory: { t: number; p: number }[] = [];
+    const now = Date.now();
+    for (let i = 23; i >= 0; i--) {
+      const t = now - i * 60 * 60 * 1000;
+      const drift = (Math.random() - 0.5) * 4;
+      priceHistory.push({ t, p: Math.round(pricePerShare * (1 + drift / 100)) });
+    }
+
+    const newListing: SecondaryListing = {
+      id: `listing-${Date.now()}`,
+      umkmId,
+      umkmName: umkm.name,
+      umkmEmoji: umkm.emoji,
+      umkmGradient: umkm.gradient,
+      sellerAddress: state.wallet.address ?? "0xuser",
+      shares,
+      pricePerShare,
+      bestBid: Math.round(pricePerShare * 0.97),
+      bestAsk: pricePerShare,
+      dailyVolume: 0,
+      spread: Math.round(pricePerShare * 0.03),
+      priceHistory,
+    };
+    // Reduce user's position (locked for sale)
+    set((s) => ({
+      listings: [newListing, ...s.listings],
+      positions: s.positions.map((p) =>
+        p.umkmId === umkmId
+          ? { ...p, sharesOwned: p.sharesOwned - shares }
+          : p,
+      ),
+    }));
+    return {
+      success: true,
+      message: `Listing ${shares} saham ${umkm.name} dibuat di DeepBook @ ${pricePerShare.toLocaleString("id-ID")}/saham`,
+    };
+  },
+
+  // ===== DAO Jury =====
+  daoQueue: INITIAL_DAO_QUEUE,
+
+  voteOnReport: (reportId, vote) => {
+    set((state) => {
+      const newQueue = state.daoQueue.map((item) => {
+        if (item.id !== reportId) return item;
+        // Remove previous user vote if any
+        let approvals = item.juryApprovals;
+        let rejections = item.juryRejections;
+        if (item.userVote === "approve") approvals -= 1;
+        if (item.userVote === "reject") rejections -= 1;
+        if (vote === "approve") approvals += 1;
+        if (vote === "reject") rejections += 1;
+        let status: ProfitReportQueueItem["status"] = "pending";
+        if (approvals >= item.juryRequired) status = "approved";
+        else if (rejections > item.juryRequired - approvals) status = "rejected";
+        return {
+          ...item,
+          juryApprovals: approvals,
+          juryRejections: rejections,
+          userVote: vote,
+          status,
+        };
+      });
+      return { daoQueue: newQueue };
+    });
+  },
+
+  // ===== UMKM Onboarding =====
+  onboardForm: {
+    name: "",
+    tagline: "",
+    category: "kuliner",
+    location: "",
+    description: "",
+    monthlyRevenue: 0,
+    monthlyProfit: 0,
+    valuation: 0,
+    totalShares: 0,
+    pricePerShare: 0,
+    legalDocStatus: "idle",
+    legalDocBlobId: null,
+    financialDocStatus: "idle",
+    financialDocBlobId: null,
+  },
+
+  updateOnboardForm: (patch) =>
+    set((state) => ({ onboardForm: { ...state.onboardForm, ...patch } })),
+
+  uploadWalrusDoc: async (docType) => {
+    const stateKey = docType === "legal" ? "legalDocStatus" : "financialDocStatus";
+    const blobKey = docType === "legal" ? "legalDocBlobId" : "financialDocBlobId";
+    set((state) => ({
+      onboardForm: { ...state.onboardForm, [stateKey]: "uploading" },
+    }));
+    // Simulate Walrus upload (in production: HTTP PUT to aggregator, return blob ID)
+    await new Promise((r) => setTimeout(r, 1400));
+    // Generate mock Walrus blob ID (32-byte hex)
+    const chars = "0123456789abcdef";
+    let blobId = "walrus_";
+    for (let i = 0; i < 12; i++) blobId += chars[Math.floor(Math.random() * chars.length)];
+    blobId += "...";
+    for (let i = 0; i < 4; i++) blobId += chars[Math.floor(Math.random() * chars.length)];
+    set((state) => ({
+      onboardForm: {
+        ...state.onboardForm,
+        [stateKey]: "uploaded",
+        [blobKey]: blobId,
+      },
+    }));
+    return { success: true, blobId };
+  },
+
+  submitOnboard: () => {
+    const state = get();
+    const f = state.onboardForm;
+    if (!f.name || !f.location || !f.description) {
+      return { success: false, message: "Lengkapi semua field wajib", txDigest: "" };
+    }
+    if (f.legalDocStatus !== "uploaded" || f.financialDocStatus !== "uploaded") {
+      return { success: false, message: "Upload dokumen legal & laporan keuangan ke Walrus dulu", txDigest: "" };
+    }
+    if (f.totalShares <= 0 || f.pricePerShare <= 0) {
+      return { success: false, message: "Total saham & harga per saham harus > 0", txDigest: "" };
+    }
+    // In production: PTB with onboard_umkm() entry function
+    const txDigest = generateTxDigest();
+    // Reset form
+    set({
+      onboardForm: {
+        name: "",
+        tagline: "",
+        category: "kuliner",
+        location: "",
+        description: "",
+        monthlyRevenue: 0,
+        monthlyProfit: 0,
+        valuation: 0,
+        totalShares: 0,
+        pricePerShare: 0,
+        legalDocStatus: "idle",
+        legalDocBlobId: null,
+        financialDocStatus: "idle",
+        financialDocBlobId: null,
+      },
+    });
+    return {
+      success: true,
+      message: `UMKM "${f.name}" berhasil onboard. Mint NFT object + ${f.totalShares} share tokens dalam 1 PTB. Status: pending KYC verification.`,
+      txDigest,
+    };
+  },
 }));

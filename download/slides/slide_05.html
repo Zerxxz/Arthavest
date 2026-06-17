@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>SahamKita — Arsitektur Sui</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="global.css">
+  <style>
+    .feat-card { padding: 18px 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+    .feat-title { font-family: var(--font-heading); font-weight: 700; font-size: 16px; color: var(--ink); line-height: 1.25; }
+    .feat-desc { font-family: var(--font-body); font-weight: 400; font-size: 12.5px; color: var(--ink-2); line-height: 1.5; flex: 1; }
+    .used-chip {
+      font-family: var(--font-num); font-size: 10.5px; color: var(--ink-3);
+      background: #FAF6EC; border: 1px solid var(--border);
+      border-radius: 8px; padding: 5px 8px; line-height: 1.3;
+    }
+    .icon-box-sm { width: 40px; height: 40px; border-radius: 10px; display:flex; align-items:center; justify-content:center; }
+    .icon-box-sm .material-icons { font-size: 22px; }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <!-- Header -->
+    <div class="flex items-start justify-between">
+      <div style="max-width: 760px;">
+        <div class="eyebrow">ARSITEKTUR SUI</div>
+        <h1 class="font-heading text-ink" style="font-weight:700; font-size:36px; line-height:1.15; letter-spacing:-0.01em;">
+          Enam kekuatan Sui yang dipakai — bukan gimmick, alasan.
+        </h1>
+        <p class="font-body text-ink-3" style="font-size:14px; line-height:1.55; margin-top:10px; max-width:760px;">
+          SahamKita tidak mungkin sebersih ini di EVM. Setiap fitur Sui yang dipakai menyelesaikan masalah konkret yang tidak bisa diselesaikan chain lain tanpa trade-off besar.
+        </p>
+      </div>
+      <div class="flex flex-col items-end gap-1" style="padding-top:4px;">
+        <span class="pill pill-emerald"><i class="material-icons" style="font-size:13px;">bolt</i>SUI-NATIVE</span>
+        <span class="font-num text-ink-4" style="font-size:10.5px; letter-spacing:0.05em;">6 / 6 FITUR DIPAKAI</span>
+      </div>
+    </div>
+
+    <!-- 3x2 Grid -->
+    <div class="grid grid-cols-3 gap-4" style="margin-top:20px;">
+      <!-- Card 1 -->
+      <div class="card feat-card">
+        <div class="flex items-center gap-3">
+          <div class="icon-box-sm icon-box-emerald"><i class="material-icons">boxes</i></div>
+          <div class="feat-title">Object-Centric Model</div>
+        </div>
+        <p class="feat-desc">Setiap UMKM, saham, dan stream adalah object Move punya ID unik. Ownership langsung tanpa registry mapping.</p>
+        <div class="used-chip">Used in: UMKM NFT · Share token · Stream object</div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card feat-card">
+        <div class="flex items-center gap-3">
+          <div class="icon-box-sm icon-box-amber"><i class="material-icons">workflow</i></div>
+          <div class="feat-title">Programmable Transaction Blocks</div>
+        </div>
+        <p class="feat-desc">Distribusi profit ke ratusan investor dieksekusi dalam 1 tx atomik. Tidak ada window partial failure.</p>
+        <div class="used-chip">Used in: Bulk profit distribution · Buy + mint receipt</div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card feat-card">
+        <div class="flex items-center gap-3">
+          <div class="icon-box-sm icon-box-emerald"><i class="material-icons">fingerprint</i></div>
+          <div class="feat-title">zkLogin</div>
+        </div>
+        <p class="feat-desc">Investor pemula login pakai Google/Twitch — tanpa install wallet atau backup seed phrase. Zero-knowledge proof jaga privasi.</p>
+        <div class="used-chip">Used in: Onboarding investor &amp; UMKM</div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card feat-card">
+        <div class="flex items-center gap-3">
+          <div class="icon-box-sm icon-box-amber"><i class="material-icons">gift</i></div>
+          <div class="feat-title">Sponsored Transactions</div>
+        </div>
+        <p class="feat-desc">Transaksi pertama investor disponsori platform. User tidak perlu SUI untuk mulai — zero gas barrier.</p>
+        <div class="used-chip">Used in: First-time buy &amp; withdraw</div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="card feat-card">
+        <div class="flex items-center gap-3">
+          <div class="icon-box-sm icon-box-emerald"><i class="material-icons">database</i></div>
+          <div class="feat-title">Walrus Storage</div>
+        </div>
+        <p class="feat-desc">Dokumen legal UMKM (Akta, NPWP, laporan keuangan) disimpan permanen di Walrus dengan blob ID on-chain. Immutable audit trail.</p>
+        <div class="used-chip">Used in: UMKM document verification · DAO jury proof</div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="card feat-card">
+        <div class="flex items-center gap-3">
+          <div class="icon-box-sm icon-box-amber"><i class="material-icons">line_chart</i></div>
+          <div class="feat-title">DeepBook</div>
+        </div>
+        <p class="feat-desc">Saham UMKM yang sudah list bisa dipasar sekunder via DeepBook central limit orderbook. Likuiditas tanpa exit window.</p>
+        <div class="used-chip">Used in: Secondary market (live demo)</div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="slide-footer">
+      <span>SahamKita · Sui Overflow 2025</span>
+      <span class="font-num">Slide 05 / 08</span>
+    </div>
+  </div>
+
+  <aside data-notes style="display:none;">
+    <ul>
+      <li>Tekankan setiap fitur Sui menyelesaikan masalah konkret — bukan checklist fitur.</li>
+      <li>PTB bulk distribution adalah killer feature: 152 investor atomik, tidak bisa di EVM tanpa loop tx.</li>
+      <li>Walrus = trust layer: dokumen legal immutable, bukti untuk DAO jury.</li>
+      <li>DeepBook memberi likuiditas sekunder tanpa exit window — beda dari crowdfund biasa.</li>
+      <li>zkLogin + sponsored tx = zero-friction onboarding untuk investor pemula Indonesia.</li>
+    </ul>
+  </aside>
+</body>
+</html>
