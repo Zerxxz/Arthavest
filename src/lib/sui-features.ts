@@ -1,6 +1,6 @@
 import type { SuiFeature } from "./types";
 
-// Showcase Sui features yang dipakai di SahamKita
+// Showcase Sui features yang dipakai di Arthavest
 export const SUI_FEATURES: SuiFeature[] = [
   {
     id: "object-model",
@@ -62,7 +62,7 @@ export const SUISTREAM_PRIMITIVE_DESCRIPTION = {
   name: "SuiStream Primitive",
   tagline: "Money stream sebagai object Move — composable, transferable, fractionalizable",
   description:
-    "SuiStream adalah lapisan primitive di bawah SahamKita. Setiap stream pembayaran adalah object Move yang dimiliki penerima. Stream bisa dijual ke pihak ketiga (resell sisa profit), dijadikan jaminan, atau di-fractionalize untuk diwariskan. PTB memungkinkan create + fund + start dalam 1 tx atomik.",
+    "SuiStream adalah lapisan primitive di bawah Arthavest. Setiap stream pembayaran adalah object Move yang dimiliki penerima. Stream bisa dijual ke pihak ketiga (resell sisa profit), dijadikan jaminan, atau di-fractionalize untuk diwariskan. PTB memungkinkan create + fund + start dalam 1 tx atomik.",
   capabilities: [
     {
       label: "Rate per detik",

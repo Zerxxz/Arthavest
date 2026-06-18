@@ -1,5 +1,5 @@
 /**
- * i18n — Translation dictionaries for SahamKita (EN / ID / ZH)
+ * i18n — Translation dictionaries for Arthavest (EN / ID / ZH)
  *
  * Usage:
  *   const { t, lang, setLang } = useTranslation();
@@ -59,7 +59,7 @@ const en: Dict = {
   "hero.titleLine1": "Invest in Indonesian MSMEs.",
   "hero.titleLine2": "Profits flow",
   "hero.titleLine3": "per second.",
-  "hero.subtitle": "SahamKita lets you own shares of your favorite coffee shop, laundry, or catering — starting from Rp 50,000. Monthly MSME profits stream automatically to your wallet via SuiStream primitive — zero platform fee, zero manual transfer, atomic.",
+  "hero.subtitle": "Arthavest lets you own shares of your favorite coffee shop, laundry, or catering — starting from Rp 50,000. Monthly MSME profits stream automatically to your wallet via SuiStream primitive — zero platform fee, zero manual transfer, atomic.",
   "hero.explore": "Explore MSMEs",
   "hero.howItWorks": "How It Works",
   "hero.umkmVerified": "MSMEs verified",
@@ -256,7 +256,7 @@ const en: Dict = {
   "dao.reportRejected": "Report rejected · Dispute escalation active",
 
   // Onboarding
-  "onboard.title": "Onboard MSME to SahamKita",
+  "onboard.title": "Onboard MSME to Arthavest",
   "onboard.subtitle": "Mint MSME NFT + share tokens via PTB · Legal docs permanent on Walrus",
   "onboard.step1": "Basic Info",
   "onboard.step2": "Financials",
@@ -313,7 +313,7 @@ const en: Dict = {
   // How It Works
   "how.badge": "How It Works",
   "how.title": "Two layers, one experience",
-  "how.subtitle": "SahamKita is an app built on top of SuiStream — a composable money-stream primitive. Each monthly MSME profit is converted into a stream object that flows to investor wallets every second.",
+  "how.subtitle": "Arthavest is an app built on top of SuiStream — a composable money-stream primitive. Each monthly MSME profit is converted into a stream object that flows to investor wallets every second.",
   "how.layer1": "LAYER 1 · PRIMITIVE",
   "how.layer2": "LAYER 2 · APPLICATION",
   "how.cap.ratePerSec": "Rate per second",
@@ -340,7 +340,7 @@ const en: Dict = {
   "how.cap.composable": "Composable",
   "how.cap.packNft": "Can be packed as NFT / collateral",
   "how.app.tagline": "MSME ownership marketplace + profit distribution via SuiStream",
-  "how.app.body": "SahamKita wraps SuiStream with MSME & investor onboarding UX. Each MSME is an NFT object, each share is a fungible token, and each profit distribution is a PTB that calls SuiStream::create_stream for all investors in 1 tx.",
+  "how.app.body": "Arthavest wraps SuiStream with MSME & investor onboarding UX. Each MSME is an NFT object, each share is a fungible token, and each profit distribution is a PTB that calls SuiStream::create_stream for all investors in 1 tx.",
   "how.step1.label": "MSME onboard",
   "how.step1.desc": "Admin verifies → mint MSME NFT + 1800 share tokens",
   "how.step2.label": "Investor buys share",
@@ -355,19 +355,19 @@ const en: Dict = {
   // Architecture
   "arch.badge": "Sui-Native Architecture",
   "arch.title": "Built on the unique power of Sui",
-  "arch.subtitle": "SahamKita wouldn't be this clean on EVM. Every Sui feature used isn't a gimmick — it's the reason this product must be built on Sui.",
+  "arch.subtitle": "Arthavest wouldn't be this clean on EVM. Every Sui feature used isn't a gimmick — it's the reason this product must be built on Sui.",
   "arch.pakai": "USED IN",
   "arch.benefit": "BENEFIT",
   "arch.objectModelTitle": "Object Model in Sui",
-  "arch.objectModelBody": "Every entity in SahamKita is a Move object with a unique ID. Ownership is determined by the object owner field — not a mapping in contract storage.",
+  "arch.objectModelBody": "Every entity in Arthavest is a Move object with a unique ID. Ownership is determined by the object owner field — not a mapping in contract storage.",
   "arch.ptbTitle": "Programmable Transaction Block",
   "arch.ptbBody": "Profit distribution to hundreds of investors executes in 1 PTB. Each step can depend on the previous step's output. Atomic: if 1 fails, all rollback.",
   "arch.reusability": "Reusability angle",
   "arch.reusabilityTitle": "SuiStream — not just one product",
-  "arch.reusabilityBody": "SuiStream is designed as a reusable primitive. Can be used for freelancer payroll, token vesting, resellable subscriptions, or micro installment payments. SahamKita is its first use case, but the ecosystem can build on it without permission.",
+  "arch.reusabilityBody": "SuiStream is designed as a reusable primitive. Can be used for freelancer payroll, token vesting, resellable subscriptions, or micro installment payments. Arthavest is its first use case, but the ecosystem can build on it without permission.",
   "arch.suiStream.name": "SuiStream Primitive",
   "arch.suiStream.tagline": "Money stream as a Move object — composable, transferable, fractionalizable",
-  "arch.suiStream.description": "SuiStream is a primitive layer below SahamKita. Each payment stream is a Move object owned by the recipient. Streams can be sold to third parties (resell remaining profit), used as collateral, or fractionalized for inheritance. PTB enables create + fund + start in 1 atomic tx.",
+  "arch.suiStream.description": "SuiStream is a primitive layer below Arthavest. Each payment stream is a Move object owned by the recipient. Streams can be sold to third parties (resell remaining profit), used as collateral, or fractionalized for inheritance. PTB enables create + fund + start in 1 atomic tx.",
   "arch.feature.object-model.name": "Object-Centric Model",
   "arch.feature.object-model.description": "Each MSME, share ownership, and stream is a separate Move object with a unique ID. Can be transferred, fractionalized, or used as collateral without intermediary contracts.",
   "arch.feature.object-model.usedIn": "MSME NFT, Share Token, Stream Object",
@@ -413,7 +413,7 @@ const en: Dict = {
   "footer.umkmDashboard": "MSME Dashboard",
   "footer.howItWorks": "How It Works",
   "footer.suiArch": "Sui Architecture",
-  "footer.copyright": "© 2025 SahamKita · Built for Sui Overflow Hackathon. Demo data — not real investment.",
+  "footer.copyright": "© 2025 Arthavest · Built for Sui Overflow Hackathon. Demo data — not real investment.",
   "footer.madeWith": "Made with ☕ in Bandung · Move + Sui + Next.js",
 
   // Common
@@ -464,7 +464,7 @@ const id: Dict = {
   "hero.titleLine1": "Investasi UMKM Indonesia.",
   "hero.titleLine2": "Profit mengalir",
   "hero.titleLine3": "per detik.",
-  "hero.subtitle": "SahamKita memungkinkanmu punya 'saham' warung kopi, laundry, atau catering langgananmu mulai dari Rp 50.000. Profit bulanan UMKM otomatis mengalir ke wallet-mu via SuiStream primitive — zero platform fee, zero manual transfer, atomic.",
+  "hero.subtitle": "Arthavest memungkinkanmu punya 'saham' warung kopi, laundry, atau catering langgananmu mulai dari Rp 50.000. Profit bulanan UMKM otomatis mengalir ke wallet-mu via SuiStream primitive — zero platform fee, zero manual transfer, atomic.",
   "hero.explore": "Jelajahi UMKM",
   "hero.howItWorks": "Cara Kerja",
   "hero.umkmVerified": "UMKM terverifikasi",
@@ -661,7 +661,7 @@ const id: Dict = {
   "dao.reportRejected": "Report ditolak · Dispute escalation aktif",
 
   // Onboarding
-  "onboard.title": "Onboard UMKM ke SahamKita",
+  "onboard.title": "Onboard UMKM ke Arthavest",
   "onboard.subtitle": "Mint UMKM NFT + share tokens via PTB · Dokumen legal permanen di Walrus",
   "onboard.step1": "Info Dasar",
   "onboard.step2": "Finansial",
@@ -718,7 +718,7 @@ const id: Dict = {
   // How It Works
   "how.badge": "Cara Kerja",
   "how.title": "Dua lapisan, satu pengalaman",
-  "how.subtitle": "SahamKita adalah aplikasi yang dibangun di atas SuiStream — primitive money-stream yang composable. Setiap profit bulanan UMKM dikonversi menjadi stream object yang mengalir ke wallet investor setiap detik.",
+  "how.subtitle": "Arthavest adalah aplikasi yang dibangun di atas SuiStream — primitive money-stream yang composable. Setiap profit bulanan UMKM dikonversi menjadi stream object yang mengalir ke wallet investor setiap detik.",
   "how.layer1": "LAYER 1 · PRIMITIVE",
   "how.layer2": "LAYER 2 · APLIKASI",
   "how.cap.ratePerSec": "Rate per detik",
@@ -745,7 +745,7 @@ const id: Dict = {
   "how.cap.composable": "Composable",
   "how.cap.packNft": "Bisa di-pack jadi NFT / collateral",
   "how.app.tagline": "Marketplace kepemilikan UMKM + distribusi profit via SuiStream",
-  "how.app.body": "SahamKita membungkus SuiStream dengan UX onboarding UMKM dan investor. Setiap UMKM adalah NFT object, setiap saham adalah fungible token, dan setiap distribusi profit adalah PTB yang memanggil SuiStream::create_stream untuk semua investor dalam 1 tx.",
+  "how.app.body": "Arthavest membungkus SuiStream dengan UX onboarding UMKM dan investor. Setiap UMKM adalah NFT object, setiap saham adalah fungible token, dan setiap distribusi profit adalah PTB yang memanggil SuiStream::create_stream untuk semua investor dalam 1 tx.",
   "how.step1.label": "UMKM onboard",
   "how.step1.desc": "Admin verifikasi → mint UMKM NFT + 1800 share tokens",
   "how.step2.label": "Investor beli share",
@@ -760,19 +760,19 @@ const id: Dict = {
   // Architecture
   "arch.badge": "Sui-Native Architecture",
   "arch.title": "Dibangun di atas kekuatan unik Sui",
-  "arch.subtitle": "SahamKita tidak mungkin sebersih ini di EVM. Setiap fitur Sui yang dipakai bukan gimmick — ini adalah alasan kenapa produk ini harus dibangun di Sui.",
+  "arch.subtitle": "Arthavest tidak mungkin sebersih ini di EVM. Setiap fitur Sui yang dipakai bukan gimmick — ini adalah alasan kenapa produk ini harus dibangun di Sui.",
   "arch.pakai": "PAKAI",
   "arch.benefit": "BENEFIT",
   "arch.objectModelTitle": "Object Model di Sui",
-  "arch.objectModelBody": "Setiap entity di SahamKita adalah object Move yang punya ID unik. Ownership ditentukan oleh object owner field — bukan mapping di contract storage.",
+  "arch.objectModelBody": "Setiap entity di Arthavest adalah object Move yang punya ID unik. Ownership ditentukan oleh object owner field — bukan mapping di contract storage.",
   "arch.ptbTitle": "Programmable Transaction Block",
   "arch.ptbBody": "Distribusi profit ke ratusan investor dieksekusi dalam 1 PTB. Setiap langkah bisa bergantung pada output langkah sebelumnya. Atomic: kalau 1 gagal, semua rollback.",
   "arch.reusability": "Reusability angle",
   "arch.reusabilityTitle": "SuiStream — bukan satu produk",
-  "arch.reusabilityBody": "SuiStream dirancang sebagai primitive yang reusable. Bisa dipakai untuk payroll freelancer, vesting token, subscription yang di-resell, atau pembayaran cicilan mikro. SahamKita adalah use case pertamanya, tapi ekosistem bisa membangun di atasnya tanpa minta izin.",
+  "arch.reusabilityBody": "SuiStream dirancang sebagai primitive yang reusable. Bisa dipakai untuk payroll freelancer, vesting token, subscription yang di-resell, atau pembayaran cicilan mikro. Arthavest adalah use case pertamanya, tapi ekosistem bisa membangun di atasnya tanpa minta izin.",
   "arch.suiStream.name": "SuiStream Primitive",
   "arch.suiStream.tagline": "Money stream sebagai object Move — composable, transferable, fractionalizable",
-  "arch.suiStream.description": "SuiStream adalah lapisan primitive di bawah SahamKita. Setiap stream pembayaran adalah object Move yang dimiliki penerima. Stream bisa dijual ke pihak ketiga (resell sisa profit), dijadikan jaminan, atau di-fractionalize untuk diwariskan. PTB memungkinkan create + fund + start dalam 1 tx atomik.",
+  "arch.suiStream.description": "SuiStream adalah lapisan primitive di bawah Arthavest. Setiap stream pembayaran adalah object Move yang dimiliki penerima. Stream bisa dijual ke pihak ketiga (resell sisa profit), dijadikan jaminan, atau di-fractionalize untuk diwariskan. PTB memungkinkan create + fund + start dalam 1 tx atomik.",
   "arch.feature.object-model.name": "Object-Centric Model",
   "arch.feature.object-model.description": "Setiap UMKM, kepemilikan saham, dan stream adalah object Move terpisah dengan ID unik. Bisa dipindahkan, di-fractionalize, atau dijadikan jaminan tanpa kontrak perantara.",
   "arch.feature.object-model.usedIn": "UMKM NFT, Share Token, Stream Object",
@@ -818,7 +818,7 @@ const id: Dict = {
   "footer.umkmDashboard": "Dashboard UMKM",
   "footer.howItWorks": "Cara Kerja",
   "footer.suiArch": "Arsitektur Sui",
-  "footer.copyright": "© 2025 SahamKita · Built for Sui Overflow Hackathon. Demo data — bukan investasi nyata.",
+  "footer.copyright": "© 2025 Arthavest · Built for Sui Overflow Hackathon. Demo data — bukan investasi nyata.",
   "footer.madeWith": "Made with ☕ in Bandung · Move + Sui + Next.js",
 
   // Common
@@ -869,7 +869,7 @@ const zh: Dict = {
   "hero.titleLine1": "投资印尼中小企业。",
   "hero.titleLine2": "收益每秒",
   "hero.titleLine3": "流入。",
-  "hero.subtitle": "SahamKita 让你拥有喜爱咖啡店、洗衣店或餐饮的股份——起投仅 5 万印尼盾。商户月度利润通过 SuiStream 原语自动流入你的钱包——零平台费、零手动转账、原子化。",
+  "hero.subtitle": "Arthavest 让你拥有喜爱咖啡店、洗衣店或餐饮的股份——起投仅 5 万印尼盾。商户月度利润通过 SuiStream 原语自动流入你的钱包——零平台费、零手动转账、原子化。",
   "hero.explore": "浏览商户",
   "hero.howItWorks": "工作原理",
   "hero.umkmVerified": "已验证商户",
@@ -1066,7 +1066,7 @@ const zh: Dict = {
   "dao.reportRejected": "报告已拒绝 · 争议升级已激活",
 
   // Onboarding
-  "onboard.title": "商户入驻 SahamKita",
+  "onboard.title": "商户入驻 Arthavest",
   "onboard.subtitle": "通过 PTB 铸造商户 NFT + 股份代币 · 法律文件永久存储于 Walrus",
   "onboard.step1": "基本信息",
   "onboard.step2": "财务",
@@ -1123,7 +1123,7 @@ const zh: Dict = {
   // How It Works
   "how.badge": "工作原理",
   "how.title": "两层架构,一种体验",
-  "how.subtitle": "SahamKita 是构建在 SuiStream 之上的应用——一个可组合的货币流原语。每笔商户月度利润都转换为每秒流入投资者钱包的流对象。",
+  "how.subtitle": "Arthavest 是构建在 SuiStream 之上的应用——一个可组合的货币流原语。每笔商户月度利润都转换为每秒流入投资者钱包的流对象。",
   "how.layer1": "第 1 层 · 原语",
   "how.layer2": "第 2 层 · 应用",
   "how.cap.ratePerSec": "每秒费率",
@@ -1150,7 +1150,7 @@ const zh: Dict = {
   "how.cap.composable": "可组合",
   "how.cap.packNft": "可打包为 NFT / 抵押品",
   "how.app.tagline": "商户所有权市场 + 通过 SuiStream 分配利润",
-  "how.app.body": "SahamKita 用商户和投资者引导 UX 包装 SuiStream。每个商户是一个 NFT 对象,每份股份是可替代代币,每次利润分配是一个 PTB,在 1 笔交易中为所有投资者调用 SuiStream::create_stream。",
+  "how.app.body": "Arthavest 用商户和投资者引导 UX 包装 SuiStream。每个商户是一个 NFT 对象,每份股份是可替代代币,每次利润分配是一个 PTB,在 1 笔交易中为所有投资者调用 SuiStream::create_stream。",
   "how.step1.label": "商户入驻",
   "how.step1.desc": "管理员验证 → 铸造商户 NFT + 1800 份代币",
   "how.step2.label": "投资者购买股份",
@@ -1165,19 +1165,19 @@ const zh: Dict = {
   // Architecture
   "arch.badge": "Sui 原生架构",
   "arch.title": "构建于 Sui 的独特能力之上",
-  "arch.subtitle": "SahamKita 在 EVM 上无法如此干净。所用每个 Sui 功能都不是噱头——而是该产品必须构建在 Sui 上的理由。",
+  "arch.subtitle": "Arthavest 在 EVM 上无法如此干净。所用每个 Sui 功能都不是噱头——而是该产品必须构建在 Sui 上的理由。",
   "arch.pakai": "用于",
   "arch.benefit": "益处",
   "arch.objectModelTitle": "Sui 中的对象模型",
-  "arch.objectModelBody": "SahamKita 中的每个实体都是具有唯一 ID 的 Move 对象。所有权由 object owner 字段决定——而非合约存储中的映射。",
+  "arch.objectModelBody": "Arthavest 中的每个实体都是具有唯一 ID 的 Move 对象。所有权由 object owner 字段决定——而非合约存储中的映射。",
   "arch.ptbTitle": "可编程交易块",
   "arch.ptbBody": "向数百位投资者分配利润在 1 个 PTB 中执行。每一步都可依赖上一步的输出。原子化: 若 1 步失败,全部回滚。",
   "arch.reusability": "可复用性",
   "arch.reusabilityTitle": "SuiStream — 不只是一个产品",
-  "arch.reusabilityBody": "SuiStream 设计为可复用原语。可用于自由职业者薪资、代币归属、可转售订阅或小额分期付款。SahamKita 是其首个用例,但生态系统可无需许可地在其上构建。",
+  "arch.reusabilityBody": "SuiStream 设计为可复用原语。可用于自由职业者薪资、代币归属、可转售订阅或小额分期付款。Arthavest 是其首个用例,但生态系统可无需许可地在其上构建。",
   "arch.suiStream.name": "SuiStream 原语",
   "arch.suiStream.tagline": "货币流作为 Move 对象 — 可组合、可转让、可份额化",
-  "arch.suiStream.description": "SuiStream 是 SahamKita 下方的原语层。每个支付流是由接收者拥有的 Move 对象。流可出售给第三方(转售剩余利润)、用作抵押,或份额化以继承。PTB 支持 create + fund + start 在 1 笔原子交易中完成。",
+  "arch.suiStream.description": "SuiStream 是 Arthavest 下方的原语层。每个支付流是由接收者拥有的 Move 对象。流可出售给第三方(转售剩余利润)、用作抵押,或份额化以继承。PTB 支持 create + fund + start 在 1 笔原子交易中完成。",
   "arch.feature.object-model.name": "对象中心模型",
   "arch.feature.object-model.description": "每个商户、股权和流都是具有唯一 ID 的独立 Move 对象。可转移、份额化或用作抵押,无需中介合约。",
   "arch.feature.object-model.usedIn": "商户 NFT、股份代币、流对象",
@@ -1223,7 +1223,7 @@ const zh: Dict = {
   "footer.umkmDashboard": "商户面板",
   "footer.howItWorks": "工作原理",
   "footer.suiArch": "Sui 架构",
-  "footer.copyright": "© 2025 SahamKita · 为 Sui Overflow 黑客松打造。演示数据——非真实投资。",
+  "footer.copyright": "© 2025 Arthavest · 为 Sui Overflow 黑客松打造。演示数据——非真实投资。",
   "footer.madeWith": "用 ☕ 在万隆打造 · Move + Sui + Next.js",
 
   // Common

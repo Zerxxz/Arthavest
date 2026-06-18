@@ -398,23 +398,23 @@ export function OnboardingUMKM() {
 
 // 1. Mint UMKM NFT object
 let umkm = ptb.move_call(
-  "saham_kita::saham_kita", "onboard_umkm",
+  "arthavest::arthavest", "onboard_umkm",
   [admin_cap, treasury, name, location,
    ${form.legalDocBlobId ? `"${form.legalDocBlobId}"` : "legal_blob_id"},
    ${form.totalShares}, ${form.pricePerShare}]
 );
 
-// 2. Mint ${form.totalShares} share tokens (SAHAM)
+// 2. Mint ${form.totalShares} share tokens (ARTHA)
 for i in 0..${form.totalShares} {
   let share = ptb.move_call(
     "sui::coin", "mint",
-    [treasury_cap<SAHAM>, 1]
+    [treasury_cap<ARTHA>, 1]
   );
   ptb.transfer_args(umkm_owner, share);
 }
 
 // 3. Emit UMKMOnboarded event
-ptb.move_call("saham_kita::saham_kita", "emit_onboarded", [umkm]);
+ptb.move_call("arthavest::arthavest", "emit_onboarded", [umkm]);
 
 ptb.execute(); // 1 tx, atomic, ~800ms finality`}
                     </pre>

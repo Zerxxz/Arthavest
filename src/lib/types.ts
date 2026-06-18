@@ -1,4 +1,4 @@
-// Tipe data inti untuk SahamKita + SuiStream
+// Tipe data inti untuk Arthavest + SuiStream
 
 export type UMKMCategory =
   | "kuliner"

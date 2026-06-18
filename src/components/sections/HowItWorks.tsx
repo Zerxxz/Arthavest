@@ -146,7 +146,7 @@ export function HowItWorks() {
             </div>
           </motion.div>
 
-          {/* Layer 2: SahamKita */}
+          {/* Layer 2: Arthavest */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -160,7 +160,7 @@ export function HowItWorks() {
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Boxes className="h-5 w-5 text-amber-600" />
-                  <h3 className="text-xl font-bold">SahamKita App</h3>
+                  <h3 className="text-xl font-bold">Arthavest App</h3>
                 </div>
                 <p className="text-sm text-muted-foreground">
                   {t("how.app.tagline")}

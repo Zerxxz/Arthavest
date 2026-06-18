@@ -4,7 +4,7 @@ import { generateTxDigest } from "./format";
 import type { Language } from "./i18n";
 
 // ===== Language persistence (load initial from localStorage) =====
-const STORAGE_KEY_LANG = "sahamkita-lang";
+const STORAGE_KEY_LANG = "arthavest-lang";
 function getInitialLang(): Language {
   if (typeof window === "undefined") return "id";
   try {

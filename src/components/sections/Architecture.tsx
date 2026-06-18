@@ -41,7 +41,7 @@ const SUISTREAM_CAP_KEYS = [
 // `descKey` points to the translated caption.
 const TREE_ITEMS = [
   { name: "UMKM", type: "struct has key, store", descKey: "arch.tree.umkm", icon: "🏪" },
-  { name: "ShareToken", type: "coin::Coin<SAHAM>", descKey: "arch.tree.shareToken", icon: "🪙" },
+  { name: "ShareToken", type: "coin::Coin<ARTHA>", descKey: "arch.tree.shareToken", icon: "🪙" },
   { name: "ProfitReport", type: "struct has key", descKey: "arch.tree.profitReport", icon: "📊" },
   { name: "Distribution", type: "struct has key", descKey: "arch.tree.distribution", icon: "📦" },
 ] as const;
@@ -137,7 +137,7 @@ export function Architecture() {
               <div className="space-y-2 font-mono text-xs">
                 <div className="flex items-center gap-2 p-2.5 rounded-lg bg-primary/5 border border-primary/20">
                   <Boxes className="h-4 w-4 text-primary flex-shrink-0" />
-                  <span className="font-bold">Package: saham_kita::</span>
+                  <span className="font-bold">Package: arthavest::</span>
                 </div>
                 <div className="ml-6 space-y-1.5">
                   {TREE_ITEMS.map((item) => (
@@ -222,7 +222,7 @@ for (holder in holders) {
 
 // 4. Emit Distribution receipt NFT
 ptb.move_call(
-  "saham_kita::distribution",
+  "arthavest::distribution",
   "mint_receipt",
   [umkm, holders.length, amount]
 );

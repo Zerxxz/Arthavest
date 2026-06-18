@@ -16,17 +16,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SahamKita — Investasi UMKM Indonesia berbasis SuiStream",
+  title: "Arthavest — Investasi UMKM Indonesia berbasis SuiStream",
   description: "Platform kepemilikan fraksional UMKM Indonesia. Profit bulanan mengalir otomatis ke investor via SuiStream primitive di jaringan Sui.",
-  keywords: ["Sui", "SuiStream", "UMKM", "investasi", "RWA", "hackathon", "Sui Overflow"],
-  authors: [{ name: "SahamKita Team" }],
+  keywords: ["Sui", "SuiStream", "UMKM", "investasi", "RWA", "hackathon", "Sui Overflow", "Arthavest"],
+  authors: [{ name: "Arthavest Team" }],
   icons: {
     icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
   },
   openGraph: {
-    title: "SahamKita — Investasi UMKM Indonesia",
+    title: "Arthavest — Investasi UMKM Indonesia",
     description: "Profit bulanan mengalir otomatis ke investor via SuiStream di jaringan Sui.",
-    siteName: "SahamKita",
+    siteName: "Arthavest",
     type: "website",
   },
 };

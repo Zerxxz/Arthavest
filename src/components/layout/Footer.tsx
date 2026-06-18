@@ -20,7 +20,7 @@ export function Footer() {
                 <Sparkles className="h-4 w-4 text-primary-foreground" />
               </div>
               <div>
-                <div className="font-bold">SahamKita</div>
+                <div className="font-bold">Arthavest</div>
                 <div className="text-[10px] text-muted-foreground">
                   {t("footer.tagline")}
                 </div>

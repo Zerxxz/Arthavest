@@ -86,7 +86,7 @@ export function Header() {
               />
             </div>
             <div className="flex flex-col items-start leading-none">
-              <span className="text-base font-bold tracking-tight">SahamKita</span>
+              <span className="text-base font-bold tracking-tight">Arthavest</span>
               <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1">
                 {isRealWallet ? (
                   <>
