@@ -1,4 +1,4 @@
-# SahamKita — Demo Video Script (2 menit)
+# Arthavest — Demo Video Script (2 menit)
 
 **Tujuan**: Untuk submission Sui Overflow Hackathon. Video menampilkan alur lengkap produk, dengan narasi singkat dan visual yang jelas.
 
@@ -12,19 +12,19 @@
 
 **Visual**: 
 - Buka dengan frame statis: angka besar "64M UMKM Indonesia · 60% PDB · 87% ditolak bank"
-- Slow zoom-in ke angka, lalu crossfade ke screenshot hero SahamKita
+- Slow zoom-in ke angka, lalu crossfade ke screenshot hero Arthavest
 
 **Narasi (Indonesia)**:
-> "Enam puluh empat juta UMKM Indonesia menyumbang 60% PDB, tapi 9 dari 10 tidak bisa akses pinjaman bank. Investor retail juga tidak punya jalur investasi kecil ke bisnis lokal. SahamKita mengubah ini — pakai kekuatan unik Sui."
+> "Enam puluh empat juta UMKM Indonesia menyumbang 60% PDB, tapi 9 dari 10 tidak bisa akses pinjaman bank. Investor retail juga tidak punya jalur investasi kecil ke bisnis lokal. Arthavest mengubah ini — pakai kekuatan unik Sui."
 
-**On-screen text**: "SahamKita · Investasi UMKM Indonesia · Profit mengalir per detik"
+**On-screen text**: "Arthavest · Investasi UMKM Indonesia · Profit mengalir per detik"
 
 ---
 
 ## Scene 2 — Marketplace Tour (0:15 - 0:35)
 
 **Visual**:
-- Browser preview SahamKita sudah ke-load
+- Browser preview Arthavest sudah ke-load
 - Mouse cursor bergerak ke tab "Marketplace", hover salah satu card UMKM (Kopi Senja)
 - Klik card → modal detail terbuka, scroll singkat menampilkan grafik performa + buy box
 - Highlight badge "KYC Verified", "Walrus: walrus_b1x9af...k3p7", estimasi APY 18.7%
@@ -90,10 +90,10 @@
 - Cut ke tab "DAO Jury" — tampilkan antrian profit report, klik tombol thumbs-up approve
 - Cut ke tab "Onboard UMKM" — tampilkan 4-step wizard, klik "Submit" dengan PTB preview
 - Closeup: Header badge berubah dari "Demo mode" → "Sui Testnet · Live" (jika wallet extension terinstall)
-- Final frame: logo SahamKita + tagline + URL preview
+- Final frame: logo Arthavest + tagline + URL preview
 
 **Narasi**:
-> "Bonus: pasaran sekunder via DeepBook untuk likuiditas, DAO jury untuk verifikasi profit, dan onboarding UMKM 4-langkah dengan upload Walrus. SahamKita adalah Sui-native — setiap fitur Sui yang dipakai menyelesaikan masalah konkret. Built for Sui Overflow. Terima kasih."
+> "Bonus: pasaran sekunder via DeepBook untuk likuiditas, DAO jury untuk verifikasi profit, dan onboarding UMKM 4-langkah dengan upload Walrus. Arthavest adalah Sui-native — setiap fitur Sui yang dipakai menyelesaikan masalah konkret. Built for Sui Overflow. Terima kasih."
 
 **On-screen text**: "DeepBook · DAO Jury · Walrus · zkLogin · PTB · Object Model — Sui-native end-to-end"
 
@@ -159,7 +159,7 @@ Untuk jury international, buat 2 versi:
 ## Submission Notes untuk Jury
 
 Sertakan di deskripsi video:
-> SahamKita adalah kombinasi SuiStream primitive + SahamKita marketplace — produk combo yang memanfaatkan 6 Sui-native features: Object-Centric Model, PTB, zkLogin, Sponsored Transactions, Walrus, dan DeepBook. Live demo menunjukkan 5 alur lengkap dari onboarding investor sampai distribusi profit atomik ke 152 investor dalam 1 PTB.
+> Arthavest adalah kombinasi SuiStream primitive + Arthavest marketplace — produk combo yang memanfaatkan 6 Sui-native features: Object-Centric Model, PTB, zkLogin, Sponsored Transactions, Walrus, dan DeepBook. Live demo menunjukkan 5 alur lengkap dari onboarding investor sampai distribusi profit atomik ke 152 investor dalam 1 PTB.
 >
 > Try the live demo: [preview link]
 > Source code + Move contracts: [GitHub link]

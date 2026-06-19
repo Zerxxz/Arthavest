@@ -1,11 +1,11 @@
-/// SahamKita — Marketplace for fractional UMKM ownership in Indonesia.
+/// Arthavest — Marketplace for fractional UMKM ownership in Indonesia.
 ///
 /// Built on top of `suistream::stream` for monthly profit distribution.
 /// Each UMKM is an NFT object; each share is a fungible token; each profit
 /// distribution is a PTB that creates one SuiStream per shareholder, atomically.
 ///
 /// Designed for the Sui Overflow Hackathon.
-module saham_kita::saham_kita {
+module arthavest::arthavest {
     use sui::balance::{Self, Balance};
     use sui::coin::{Self, Coin, TreasuryCap};
     use sui::event;
@@ -50,8 +50,8 @@ module saham_kita::saham_kita {
         id: UID,
     }
 
-    /// Treasury capability for the SAHAM fungible token.
-    public struct SAHAM has drop {}
+    /// Treasury capability for the ARTHA fungible token.
+    public struct ARTHA has drop {}
 
     /// ProfitReport — created by UMKM owner, references Walrus proof.
     public struct ProfitReport has key {
@@ -96,7 +96,7 @@ module saham_kita::saham_kita {
 
     // ============ Module init ============
     fun init(ctx: &mut TxContext) {
-        let cap = coin::create_currency<SAHAM>(ctx);
+        let cap = coin::create_currency<ARTHA>(ctx);
         transfer::share_object(cap);
 
         // Admin cap to the deployer.
@@ -108,7 +108,7 @@ module saham_kita::saham_kita {
     /// Admin onboards a new UMKM. Mints NFT + initial share supply to the UMKM owner.
     public entry fun onboard_umkm(
         _admin: &AdminCap,
-        treasury: &TreasuryCap<SAHAM>,
+        treasury: &TreasuryCap<ARTHA>,
         name: vector<u8>,
         location: vector<u8>,
         docs_blob_id: vector<u8>,
@@ -128,7 +128,7 @@ module saham_kita::saham_kita {
         };
         let umkm_id = object::id(&umkm);
 
-        // Mint total_shares SAHAM coins — these stay in the UMKM's treasury,
+        // Mint total_shares ARTHA coins — these stay in the UMKM's treasury,
         // to be sold to investors. (In production, use a shared Treasury object.)
         let i = 0;
         while (i < total_shares) {
@@ -156,12 +156,12 @@ module saham_kita::saham_kita {
 
     /// Investor buys `shares` shares of `umkm` by paying SUI.
     /// In production this would split from a shared UMKM treasury object;
-    /// for demo, the sender's SAHAM coin is used as input.
+    /// for demo, the sender's ARTHA coin is used as input.
     public entry fun buy_shares(
         umkm: &UMKM,
         shares: u64,
         payment: Coin<SUI>,
-        share_coin: coin::Coin<SAHAM>,
+        share_coin: coin::Coin<ARTHA>,
         ctx: &mut TxContext,
     ) {
         assert!(umkm.verified, ENotVerified);

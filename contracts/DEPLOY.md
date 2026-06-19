@@ -1,4 +1,4 @@
-# SahamKita + SuiStream — Sui Testnet Deployment Guide
+# Arthavest + SuiStream — Sui Testnet Deployment Guide
 
 This guide covers deploying the Move contracts to Sui testnet and wiring up the Next.js app with real wallet integration.
 
@@ -39,17 +39,17 @@ This guide covers deploying the Move contracts to Sui testnet and wiring up the 
 cd contracts/
 
 # Initialize Sui Move package structure
-sui move new sahamkita
-cd sahamkita/
+sui move new arthavest
+cd arthavest/
 
 # Copy our source files
 cp ../stream.move sources/
-cp ../saham_kita.move sources/
+cp ../arthavest.move sources/
 
 # Update Move.toml to declare suistream dependency
 cat > Move.toml << 'EOF'
 [package]
-name = "sahamkita"
+name = "arthavest"
 edition = "2024.beta"
 published-at = "TBD"
 
@@ -57,7 +57,7 @@ published-at = "TBD"
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
 
 [addresses]
-saham_kita = "0x0"
+arthavest = "0x0"
 suistream = "0x0"
 EOF
 
@@ -78,7 +78,7 @@ sui move publish --skip-dependency-verification
 # ...
 # Created Objects:
 #   ID: 0x...  -- AdminCap
-#   ID: 0x...  -- TreasuryCap<SAHAM>
+#   ID: 0x...  -- TreasuryCap<ARTHA>
 #   ID: 0x...  -- Package
 
 # Save the PACKAGE_ID, AdminCap ID, and TreasuryCap ID to .env.local
@@ -102,7 +102,7 @@ NEXT_PUBLIC_SUISTREAM_PACKAGE_ID=0x<same-as-package-id-for-now>
 # Call onboard_umkm entry function
 sui client call \
   --package $NEXT_PUBLIC_PACKAGE_ID \
-  --module saham_kita \
+  --module arthavest \
   --function onboard_umkm \
   --type-args \
   --args $ADMIN_CAP_ID $TREASURY_CAP_ID \
@@ -179,7 +179,7 @@ buyShares: async (umkmId, shares) => {
   const [coin] = tx.splitCoins(tx.gas, [cost]);
   // Call buy_shares
   tx.moveCall({
-    target: `${PACKAGE_ID}::saham_kita::buy_shares`,
+    target: `${PACKAGE_ID}::arthavest::buy_shares`,
     arguments: [
       tx.object(umkmObjectId),
       tx.pure.u64(shares),
@@ -195,7 +195,7 @@ buyShares: async (umkmId, shares) => {
 
 ## Sui Overflow Hackathon Submission Checklist
 
-- [x] Move contracts written (`contracts/stream.move`, `contracts/saham_kita.move`)
+- [x] Move contracts written (`contracts/stream.move`, `contracts/arthavest.move`)
 - [x] Build passes (`sui move build`)
 - [ ] Published to testnet (run the steps above)
 - [ ] At least 1 UMKM onboarded on-chain

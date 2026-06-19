@@ -1,7 +1,7 @@
 /// SuiStream Primitive — Money stream as a transferable Sui object.
 ///
 /// Designed as a reusable DeFi primitive for the Sui Overflow Hackathon.
-/// Used by SahamKita for monthly UMKM profit distribution to investors.
+/// Used by Arthavest for monthly UMKM profit distribution to investors.
 ///
 /// Key Sui-native properties:
 /// - Stream is an OBJECT owned by the recipient (transfer_args).
