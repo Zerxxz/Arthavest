@@ -118,52 +118,60 @@ export function StreamVisualizer({
           />
         ))}
 
-        {/* Source node: UMKM (left) */}
+        {/* Source node: UMKM (left) — halo ring only, icon rendered as HTML overlay below */}
         <g>
           <circle
             cx={70}
             cy={height / 2}
-            r={36}
-            fill="oklch(0.52 0.11 172 / 0.1)"
+            r={38}
+            fill="var(--card)"
             stroke="oklch(0.52 0.11 172)"
-            strokeWidth="2"
+            strokeWidth="2.5"
           />
-          <circle cx={70} cy={height / 2} r={22} fill="oklch(0.52 0.11 172)" />
-          <text
-            x={70}
-            y={height / 2 + 5}
-            textAnchor="middle"
-            fontSize="14"
-            fontWeight="700"
-            fill="white"
-          >
-            UMKM
-          </text>
         </g>
 
-        {/* Destination node: Investor (right) */}
+        {/* Destination node: Investor (right) — halo ring only, icon rendered as HTML overlay below */}
         <g>
           <circle
             cx={width - 70}
             cy={height / 2}
-            r={36}
-            fill="oklch(0.7 0.17 75 / 0.1)"
+            r={38}
+            fill="var(--card)"
             stroke="oklch(0.7 0.17 75)"
-            strokeWidth="2"
+            strokeWidth="2.5"
           />
-          <circle cx={width - 70} cy={height / 2} r={22} fill="oklch(0.7 0.17 75)" />
-          <text
-            x={width - 70}
-            y={height / 2 + 5}
-            textAnchor="middle"
-            fontSize="14"
-            fontWeight="700"
-            fill="white"
-          >
-            INVESTOR
-          </text>
         </g>
       </svg>
+
+      {/* HTML overlay: UMKM + Investor brand icons (positioned to match SVG circles, won't distort) */}
+      <div className="absolute inset-0 pointer-events-none">
+        <img
+          src="/stream-umkm.png"
+          alt="UMKM"
+          className="absolute object-contain"
+          style={{
+            left: "7%",
+            top: "50%",
+            width: "11%",
+            maxWidth: "70px",
+            height: "auto",
+            transform: "translate(-50%, -50%)",
+          }}
+        />
+        <img
+          src="/stream-investor.png"
+          alt="Investor"
+          className="absolute object-contain"
+          style={{
+            right: "7%",
+            top: "50%",
+            width: "11%",
+            maxWidth: "70px",
+            height: "auto",
+            transform: "translate(50%, -50%)",
+          }}
+        />
+      </div>
 
       {showLabels && (
         <div className="absolute inset-0 pointer-events-none">
