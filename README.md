@@ -4,7 +4,7 @@
 
 ### Invest in Indonesian MSMEs. Profits flow per second.
 
-**Fractional ownership marketplace for Indonesian MSMEs** with profit distribution via SuiStream primitive on the Sui network. Built for [Sui Overflow Hackathon 2026](https://overflow.sui.io/).
+**Fractional ownership marketplace for Indonesian MSMEs** with profit distribution via SuiStream primitive on the Sui network. Built for [Sui Overflow Hackathon 2025](https://overflow.sui.io/).
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-0D9488?style=for-the-badge&logo=vercel&logoColor=white)](https://preview-arthavest.space-z.ai/) [![Sui](https://img.shields.io/badge/Sui-Network-4DA2FF?style=for-the-badge&logo=sui&logoColor=white)](https://sui.io/) [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/) [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
