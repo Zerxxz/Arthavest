@@ -15,7 +15,6 @@ import {
   Wallet,
   LogOut,
   ChevronDown,
-  Sparkles,
   ShieldCheck,
   Zap,
   Wifi,
@@ -77,17 +76,22 @@ export function Header() {
             className="flex items-center gap-2.5 group"
             onClick={() => setActiveTab("marketplace")}
           >
-            <div className="relative h-9 w-9 rounded-xl bg-primary flex items-center justify-center shadow-glow-emerald">
-              <Sparkles className="h-5 w-5 text-primary-foreground" />
-              <motion.div
-                className="absolute inset-0 rounded-xl border-2 border-primary/40"
-                animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0, 0.6] }}
-                transition={{ duration: 2.4, repeat: Infinity }}
+            {/* Circular logo icon (custom brand mark) */}
+            <div className="relative h-12 w-12 rounded-full bg-white shadow-glow-emerald overflow-hidden flex-shrink-0 ring-1 ring-border/40">
+              <img
+                src="/logo-icon.png"
+                alt="Arthavest logo"
+                className="h-full w-full object-cover"
               />
             </div>
+            {/* Wordmark logo (Arthavest text) */}
             <div className="flex flex-col items-start leading-none">
-              <span className="text-base font-bold tracking-tight">Arthavest</span>
-              <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1">
+              <img
+                src="/logo-wordmark.png"
+                alt="Arthavest"
+                className="h-10 w-auto object-contain"
+              />
+              <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1 mt-1">
                 {isRealWallet ? (
                   <>
                     <Wifi className="h-2.5 w-2.5 text-emerald-500" />

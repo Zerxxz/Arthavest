@@ -1,7 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Droplets, Github, Twitter, ExternalLink } from "lucide-react";
+import { Droplets, Github, Twitter, ExternalLink } from "lucide-react";
 import { useAppStore } from "@/lib/store";
 import { useTranslation } from "@/lib/useTranslation";
 
@@ -15,16 +15,22 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-3">
-              <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-12 w-12 rounded-full bg-white overflow-hidden ring-1 ring-border/40 flex-shrink-0">
+                <img
+                  src="/logo-icon.png"
+                  alt="Arthavest logo"
+                  className="h-full w-full object-cover"
+                />
               </div>
-              <div>
-                <div className="font-bold">Arthavest</div>
-                <div className="text-[10px] text-muted-foreground">
-                  {t("footer.tagline")}
-                </div>
-              </div>
+              <img
+                src="/logo-wordmark.png"
+                alt="Arthavest"
+                className="h-10 w-auto object-contain"
+              />
+            </div>
+            <div className="text-[10px] text-muted-foreground mb-3">
+              {t("footer.tagline")}
             </div>
             <p className="text-xs text-muted-foreground max-w-md leading-relaxed mb-4">
               {t("footer.desc")}
