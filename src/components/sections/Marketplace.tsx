@@ -21,6 +21,7 @@ import { useState } from "react";
 import { UMKMDetail } from "./UMKMDetail";
 import type { UMKMCategory } from "@/lib/types";
 import { useTranslation } from "@/lib/useTranslation";
+import { categoryIconPath } from "@/lib/category-icons";
 
 const RISK_COLORS: Record<string, string> = {
   rendah: "bg-emerald-100 text-emerald-700 border-emerald-200",
@@ -104,12 +105,17 @@ export function Marketplace() {
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
+              className={`px-3 py-1.5 rounded-full text-xs font-medium transition-all inline-flex items-center gap-1.5 ${
                 filter === cat
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary text-secondary-foreground hover:bg-secondary/70"
               }`}
             >
+              <img
+                src={categoryIconPath(cat)}
+                alt=""
+                className={`h-4 w-4 object-contain ${filter === cat ? "" : "opacity-80"}`}
+              />
               {t(CATEGORY_KEYS[cat])}
             </button>
           ))}
@@ -152,8 +158,12 @@ export function Marketplace() {
                         {t(RISK_KEYS[umkm.riskLevel])}
                       </div>
                     </div>
-                    <div className="absolute -bottom-3 left-4 h-12 w-12 rounded-xl bg-card border-2 border-background flex items-center justify-center text-2xl shadow-sm">
-                      {umkm.emoji}
+                    <div className="absolute -bottom-3 left-4 h-12 w-12 rounded-xl bg-card border-2 border-background flex items-center justify-center shadow-sm overflow-hidden p-1">
+                      <img
+                        src={categoryIconPath(umkm.category)}
+                        alt={umkm.category}
+                        className="h-full w-full object-contain"
+                      />
                     </div>
                     {userPosition && (
                       <div className="absolute -bottom-3 right-4 px-2 py-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold shadow-sm">

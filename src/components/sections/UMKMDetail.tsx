@@ -41,6 +41,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/lib/useTranslation";
+import { categoryIconPath } from "@/lib/category-icons";
 import type { UMKMCategory } from "@/lib/types";
 
 const RISK_KEYS: Record<string, string> = {
@@ -141,8 +142,12 @@ export function UMKMDetail() {
               {t(RISK_KEYS[umkm.riskLevel])}
             </Badge>
           </div>
-          <div className="absolute -bottom-6 left-6 h-16 w-16 rounded-2xl bg-card border-4 border-background flex items-center justify-center text-3xl shadow-lg">
-            {umkm.emoji}
+          <div className="absolute -bottom-6 left-6 h-16 w-16 rounded-2xl bg-card border-4 border-background flex items-center justify-center shadow-lg overflow-hidden p-2">
+            <img
+              src={categoryIconPath(umkm.category)}
+              alt={umkm.category}
+              className="h-full w-full object-contain"
+            />
           </div>
         </div>
 

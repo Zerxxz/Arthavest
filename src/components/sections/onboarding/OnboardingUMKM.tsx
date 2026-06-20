@@ -36,6 +36,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { formatIDR, shortAddress } from "@/lib/format";
 import { useTranslation } from "@/lib/useTranslation";
+import { categoryIconPath } from "@/lib/category-icons";
 import type { UMKMCategory } from "@/lib/types";
 
 const STEPS = [
@@ -45,13 +46,13 @@ const STEPS = [
   { id: 3, icon: ShieldCheck },
 ];
 
-const CATEGORY_VALUES: { value: UMKMCategory; emoji: string }[] = [
-  { value: "kuliner", emoji: "🍲" },
-  { value: "kopi", emoji: "☕" },
-  { value: "laundry", emoji: "🧺" },
-  { value: "kerajinan", emoji: "🥬" },
-  { value: "jasa", emoji: "🔧" },
-  { value: "pertanian", emoji: "🌱" },
+const CATEGORY_VALUES: { value: UMKMCategory }[] = [
+  { value: "kuliner" },
+  { value: "kopi" },
+  { value: "laundry" },
+  { value: "kerajinan" },
+  { value: "jasa" },
+  { value: "pertanian" },
 ];
 
 export function OnboardingUMKM() {
@@ -200,7 +201,14 @@ export function OnboardingUMKM() {
                         <SelectContent>
                           {CATEGORY_VALUES.map((c) => (
                             <SelectItem key={c.value} value={c.value}>
-                              {c.emoji} {t(`market.cat.${c.value}`)}
+                              <span className="flex items-center gap-2">
+                                <img
+                                  src={categoryIconPath(c.value)}
+                                  alt=""
+                                  className="h-5 w-5 object-contain"
+                                />
+                                {t(`market.cat.${c.value}`)}
+                              </span>
                             </SelectItem>
                           ))}
                         </SelectContent>
