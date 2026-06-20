@@ -118,32 +118,11 @@ export function StreamVisualizer({
           />
         ))}
 
-        {/* Source node: UMKM (left) — halo ring only, icon rendered as HTML overlay below */}
-        <g>
-          <circle
-            cx={70}
-            cy={height / 2}
-            r={38}
-            fill="var(--card)"
-            stroke="oklch(0.52 0.11 172)"
-            strokeWidth="2.5"
-          />
-        </g>
-
-        {/* Destination node: Investor (right) — halo ring only, icon rendered as HTML overlay below */}
-        <g>
-          <circle
-            cx={width - 70}
-            cy={height / 2}
-            r={38}
-            fill="var(--card)"
-            stroke="oklch(0.7 0.17 75)"
-            strokeWidth="2.5"
-          />
-        </g>
+        {/* Source node: UMKM (left) — icon rendered as HTML overlay below (no ring) */}
+        {/* Destination node: Investor (right) — icon rendered as HTML overlay below (no ring) */}
       </svg>
 
-      {/* HTML overlay: UMKM + Investor brand icons (positioned to match SVG circles, won't distort) */}
+      {/* HTML overlay: UMKM + Investor brand icons (clean, no halo ring) */}
       <div className="absolute inset-0 pointer-events-none">
         <img
           src="/stream-umkm.png"
@@ -152,8 +131,8 @@ export function StreamVisualizer({
           style={{
             left: "7%",
             top: "50%",
-            width: "11%",
-            maxWidth: "70px",
+            width: "13%",
+            maxWidth: "84px",
             height: "auto",
             transform: "translate(-50%, -50%)",
           }}
@@ -165,8 +144,8 @@ export function StreamVisualizer({
           style={{
             right: "7%",
             top: "50%",
-            width: "11%",
-            maxWidth: "70px",
+            width: "13%",
+            maxWidth: "84px",
             height: "auto",
             transform: "translate(50%, -50%)",
           }}
