@@ -263,3 +263,51 @@
   background-size: 200% 100%;
   animation: shimmer 2.5s ease-in-out infinite;
 }
+
+/* === @mysten/dapp-kit ConnectButton overrides === */
+/* Match Arthavest brand styling — emerald primary + glow */
+
+.arthavest-connect-btn,
+.sui-connect-button,
+button[class*="sui-connect"] {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border: none !important;
+  border-radius: 0.5rem !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  height: 2.25rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  cursor: pointer !important;
+  box-shadow: 0 0 0 1px oklch(0.52 0.11 172 / 0.1), 0 8px 30px -8px oklch(0.52 0.11 172 / 0.25) !important;
+  transition: background-color 0.2s ease !important;
+  font-family: inherit !important;
+}
+
+.arthavest-connect-btn:hover,
+.sui-connect-button:hover,
+button[class*="sui-connect"]:hover {
+  background-color: oklch(0.45 0.1 172) !important;
+}
+
+/* dapp-kit modal styling overrides */
+.sui-modal-container,
+[class*="sui-modal"],
+[class*="ConnectModal"] {
+  font-family: var(--font-geist-sans), system-ui, sans-serif !important;
+}
+
+/* Wallet list items in modal */
+[class*="sui-wallet-item"],
+[class*="WalletListItem"] {
+  border-radius: 0.5rem !important;
+  transition: background-color 0.15s ease !important;
+}
+
+[class*="sui-wallet-item"]:hover,
+[class*="WalletListItem"]:hover {
+  background-color: var(--secondary) !important;
+}

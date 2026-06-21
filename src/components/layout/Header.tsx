@@ -31,7 +31,7 @@ import { useTranslation } from "@/lib/useTranslation";
 import { useTheme } from "next-themes";
 import { LANGUAGES } from "@/lib/i18n";
 import { useEffect, useState } from "react";
-import { useConnectWallet } from "@mysten/dapp-kit";
+import { ConnectButton, useCurrentAccount } from "@mysten/dapp-kit";
 
 export type NavTab = "marketplace" | "investor" | "owner" | "how" | "architecture" | "secondary" | "dao" | "onboarding";
 
@@ -59,7 +59,7 @@ export function Header() {
   const NAV_ITEMS = useNavItems();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const { mutate: connectReal } = useConnectWallet();
+  const _currentAccount = useCurrentAccount(); // Subscribe to account changes so wallet UI syncs
   // Mount flag — needed because next-themes theme is undefined on first SSR render.
   // Use useLayoutEffect to set before paint, avoiding visible flash.
   useEffect(() => {
@@ -245,15 +245,13 @@ export function Header() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
+                  className="flex items-center"
                 >
-                  <Button
-                    className="gap-2 h-9 shadow-glow-emerald"
-                    onClick={() => connectReal({})}
-                    title={hasExtension === false ? "Install Sui Wallet extension first (https://suiwallet.com)" : undefined}
-                  >
-                    <Zap className="h-3.5 w-3.5" />
-                    {t("header.connectWallet")}
-                  </Button>
+                  {/* dapp-kit ConnectButton — opens native wallet selection modal */}
+                  <ConnectButton
+                    connectText={t("header.connectWallet")}
+                    className="arthavest-connect-btn !h-9 !gap-2 !rounded-lg !bg-primary !px-4 !text-xs !font-semibold !text-primary-foreground !shadow-glow-emerald hover:!bg-primary/90"
+                  />
                 </motion.div>
               )}
             </AnimatePresence>
