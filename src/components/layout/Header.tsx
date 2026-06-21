@@ -31,6 +31,7 @@ import { useTranslation } from "@/lib/useTranslation";
 import { useTheme } from "next-themes";
 import { LANGUAGES } from "@/lib/i18n";
 import { useEffect, useState } from "react";
+import { useConnectWallet } from "@mysten/dapp-kit";
 
 export type NavTab = "marketplace" | "investor" | "owner" | "how" | "architecture" | "secondary" | "dao" | "onboarding";
 
@@ -50,7 +51,6 @@ function useNavItems() {
 
 export function Header() {
   const wallet = useAppStore((s) => s.wallet);
-  const connectWallet = useAppStore((s) => s.connectWallet);
   const disconnectWallet = useAppStore((s) => s.disconnectWallet);
   const activeTab = useAppStore((s) => s.activeTab);
   const setActiveTab = useAppStore((s) => s.setActiveTab);
@@ -59,6 +59,7 @@ export function Header() {
   const NAV_ITEMS = useNavItems();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const { mutate: connectReal } = useConnectWallet();
   // Mount flag — needed because next-themes theme is undefined on first SSR render.
   // Use useLayoutEffect to set before paint, avoiding visible flash.
   useEffect(() => {
@@ -245,44 +246,14 @@ export function Header() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                 >
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button className="gap-2 h-9 shadow-glow-emerald">
-                        <Zap className="h-3.5 w-3.5" />
-                        {t("header.connectWallet")}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-72">
-                      <DropdownMenuLabel className="text-xs text-muted-foreground">
-                        {t("header.chooseMethod")}
-                      </DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => connectWallet("google")} className="gap-3 py-2.5">
-                        <div className="h-7 w-7 rounded-full bg-white border flex items-center justify-center text-xs font-bold">G</div>
-                        <div className="flex-1">
-                          <div className="text-sm font-medium">{t("header.google")}</div>
-                          <div className="text-[10px] text-muted-foreground">{t("header.googleDesc")}</div>
-                        </div>
-                        <Badge variant="secondary" className="text-[9px]">{t("header.recommended")}</Badge>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => connectWallet("twitch")} className="gap-3 py-2.5">
-                        <div className="h-7 w-7 rounded-full bg-purple-100 border flex items-center justify-center text-xs font-bold">T</div>
-                        <div className="flex-1">
-                          <div className="text-sm font-medium">{t("header.twitch")}</div>
-                          <div className="text-[10px] text-muted-foreground">{t("header.twitchDesc")}</div>
-                        </div>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={() => connectWallet("ethos")} className="gap-3 py-2.5">
-                        <div className="h-7 w-7 rounded-full bg-primary/10 border flex items-center justify-center">
-                          <Wallet className="h-3.5 w-3.5 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <div className="text-sm font-medium">{t("header.ethos")}</div>
-                          <div className="text-[10px] text-muted-foreground">{t("header.ethosDesc")}</div>
-                        </div>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button
+                    className="gap-2 h-9 shadow-glow-emerald"
+                    onClick={() => connectReal({})}
+                    title={hasExtension === false ? "Install Sui Wallet extension first (https://suiwallet.com)" : undefined}
+                  >
+                    <Zap className="h-3.5 w-3.5" />
+                    {t("header.connectWallet")}
+                  </Button>
                 </motion.div>
               )}
             </AnimatePresence>

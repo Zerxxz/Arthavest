@@ -1,25 +1,24 @@
 "use client";
 
-import { useCurrentAccount, useCurrentWallet, useDisconnectWallet, useConnectWallet } from "@mysten/dapp-kit";
+import { useCurrentAccount, useCurrentWallet, useDisconnectWallet } from "@mysten/dapp-kit";
 import { useEffect, useState } from "react";
 import { useAppStore } from "@/lib/store";
 
 /**
- * Hybrid wallet hook — bridges real Sui dapp-kit wallet with our mock store.
+ * Real wallet hook — NO mock fallback.
  *
- * Strategy:
- * - If user has Sui wallet extension (Sui Wallet, Ethos, etc.), use real connection.
- * - If no extension, fall back to mock mode (auto-connects as Google zkLogin user)
- *   so the demo is always explorable.
- * - Updates our Zustand store with real wallet state when available.
+ * Strategy (production mode for demo video):
+ * - User MUST connect a real Sui wallet via dapp-kit (Sui Wallet, Ethos, etc.)
+ * - No auto-connect, no mock wallet
+ * - Detects if a Sui wallet extension is installed so we can show appropriate UI
+ *   ("Install Sui Wallet" prompt vs "Connect Wallet" button)
+ * - Syncs real wallet state to Zustand store
  */
 export function useHybridWallet() {
   const currentAccount = useCurrentAccount();
   const currentWallet = useCurrentWallet();
-  const { mutate: disconnect } = useDisconnectWallet();
-  const { mutate: connect } = useConnectWallet();
+  const { mutate: disconnectReal } = useDisconnectWallet();
   const wallet = useAppStore((s) => s.wallet);
-  const connectMock = useAppStore((s) => s.connectWallet);
   const disconnectMock = useAppStore((s) => s.disconnectWallet);
 
   const [hasExtension, setHasExtension] = useState<boolean | null>(null);
@@ -37,49 +36,41 @@ export function useHybridWallet() {
     return () => clearTimeout(t);
   }, []);
 
-  // Auto-connect mock wallet if no extension AND not already connected
-  useEffect(() => {
-    if (hasExtension === false && !wallet.connected && !currentWallet.isConnected) {
-      const t = setTimeout(() => connectMock("google"), 800);
-      return () => clearTimeout(t);
-    }
-  }, [hasExtension, wallet.connected, currentWallet.isConnected, connectMock]);
-
-  // Sync real wallet to store
+  // Sync real wallet to store — only when user actually connects via dapp-kit
   useEffect(() => {
     if (currentAccount && currentWallet.isConnected) {
-      const mockAddr =
-        "0x" +
-        Array.from({ length: 8 }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, "0")).join("") +
-        "..." +
-        Array.from({ length: 4 }, () => Math.floor(Math.random() * 256).toString(16).padStart(2, "0")).join("");
-      // Use real address from dapp-kit if available, else mock
       const realAddr = currentAccount.address.slice(0, 10) + "..." + currentAccount.address.slice(-4);
-      // Only update if not already synced
-      if (wallet.address !== realAddr) {
-        // Disconnect mock first, then connect with real data
-        if (wallet.connected && !wallet.viaZkLogin) {
-          // Already a mock session — replace with real
-        }
-        // Use connectMock to set initial state, but we'll override
-        connectMock("ethos"); // Ethos = real wallet flow
-        // Override address with real Sui address via direct store manipulation
-        useAppStore.setState((state) => ({
-          wallet: {
-            ...state.wallet,
-            connected: true,
-            address: realAddr,
-            viaZkLogin: false,
-            provider: "ethos",
-          },
-        }));
-      }
+      // Determine provider label from wallet name
+      const walletName = (currentWallet as { name?: string }).name?.toLowerCase() ?? "sui";
+      const provider: "google" | "twitch" | "ethos" = walletName.includes("ethos")
+        ? "ethos"
+        : walletName.includes("google")
+          ? "google"
+          : walletName.includes("twitch")
+            ? "twitch"
+            : "ethos";
+      const viaZkLogin = walletName.includes("google") || walletName.includes("twitch");
+
+      useAppStore.setState((state) => ({
+        wallet: {
+          ...state.wallet,
+          connected: true,
+          address: realAddr,
+          suiBalance: state.wallet.suiBalance || 0, // Real balance would come from SuiClient
+          idrBalance: state.wallet.idrBalance || 75_000_000, // Demo IDR balance for marketplace UX
+          viaZkLogin,
+          provider,
+        },
+      }));
+    } else if (!currentWallet.isConnected && wallet.connected) {
+      // Real wallet disconnected — clear store
+      disconnectMock();
     }
-  }, [currentAccount, currentWallet.isConnected, wallet.address, connectMock, wallet.connected, wallet.viaZkLogin]);
+  }, [currentAccount, currentWallet, wallet.connected, disconnectMock]);
 
   const handleDisconnect = () => {
     if (currentWallet.isConnected) {
-      disconnect();
+      disconnectReal();
     }
     disconnectMock();
   };

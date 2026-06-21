@@ -14,22 +14,13 @@ import { DAOJury } from "@/components/sections/dao/DAOJury";
 import { OnboardingUMKM } from "@/components/sections/onboarding/OnboardingUMKM";
 import { AnimatePresence, motion } from "framer-motion";
 import { Toaster as SonnerToaster } from "sonner";
-import { useEffect } from "react";
 
 export default function Home() {
   const activeTab = useAppStore((s) => s.activeTab);
 
-  // Auto-connect wallet on first load to make demo seamless
-  const connectWallet = useAppStore((s) => s.connectWallet);
-  const walletConnected = useAppStore((s) => s.wallet.connected);
-
-  useEffect(() => {
-    if (!walletConnected) {
-      // Auto-connect via zkLogin Google for demo purposes
-      const timer = setTimeout(() => connectWallet("google"), 800);
-      return () => clearTimeout(timer);
-    }
-  }, [walletConnected, connectWallet]);
+  // NOTE: Production mode — NO auto-connect mock wallet.
+  // User must connect a real Sui wallet via the "Connect Wallet" button in Header
+  // (requires Sui Wallet browser extension installed).
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
