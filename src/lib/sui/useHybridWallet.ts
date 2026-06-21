@@ -1,13 +1,15 @@
 "use client";
 
-import { useCurrentAccount, useCurrentWallet, useDisconnectWallet } from "@mysten/dapp-kit";
+import { useCurrentAccount, useCurrentWallet, useDisconnectWallet, useSuiClientContext } from "@mysten/dapp-kit";
 import { useEffect, useState } from "react";
 import { useAppStore } from "@/lib/store";
+import { toast } from "sonner";
 
 /**
  * Real wallet hook — syncs dapp-kit wallet state to Zustand store.
  *
  * NO mock fallback. User must connect a real Sui wallet via dapp-kit.
+ * Also detects if wallet is on the wrong network (must be testnet).
  */
 export function useHybridWallet() {
   const currentAccount = useCurrentAccount();
@@ -15,6 +17,7 @@ export function useHybridWallet() {
   const { mutate: disconnectReal } = useDisconnectWallet();
   const walletConnected = useAppStore((s) => s.wallet.connected);
   const disconnectMock = useAppStore((s) => s.disconnectWallet);
+  const { network: activeNetwork } = useSuiClientContext();
 
   // Extract primitives from currentWallet (avoids object identity in deps)
   const isConnected = currentWallet.isConnected;
@@ -33,6 +36,16 @@ export function useHybridWallet() {
     const t = setTimeout(check, 1500);
     return () => clearTimeout(t);
   }, []);
+
+  // Warn if wallet is on wrong network (must be testnet for our package)
+  useEffect(() => {
+    if (isConnected && activeNetwork && activeNetwork !== "testnet") {
+      toast.error("Wrong network detected!", {
+        description: `Your wallet is on "${activeNetwork}". Please switch to TESTNET in your wallet settings to use Arthavest (contracts deployed on testnet).`,
+        duration: 8000,
+      });
+    }
+  }, [isConnected, activeNetwork]);
 
   // Sync real wallet state to Zustand store
   useEffect(() => {
@@ -86,5 +99,7 @@ export function useHybridWallet() {
     isRealWallet: isConnected,
     realAccount: currentAccount,
     disconnect: handleDisconnect,
+    activeNetwork,
+    isWrongNetwork: isConnected && activeNetwork !== "testnet",
   };
 }

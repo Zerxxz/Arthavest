@@ -23,6 +23,7 @@ import {
   Moon,
   Languages,
   Check,
+  AlertTriangle,
 } from "lucide-react";
 import { shortAddress, formatIDR, formatSUI } from "@/lib/format";
 import { motion, AnimatePresence } from "framer-motion";
@@ -54,7 +55,7 @@ export function Header() {
   const disconnectWallet = useAppStore((s) => s.disconnectWallet);
   const activeTab = useAppStore((s) => s.activeTab);
   const setActiveTab = useAppStore((s) => s.setActiveTab);
-  const { hasExtension, isRealWallet } = useHybridWallet();
+  const { hasExtension, isRealWallet, isWrongNetwork, activeNetwork } = useHybridWallet();
   const { t, lang, setLang } = useTranslation();
   const NAV_ITEMS = useNavItems();
   const { theme, setTheme } = useTheme();
@@ -94,10 +95,19 @@ export function Header() {
               />
               <span className="text-[10px] text-muted-foreground font-medium flex items-center gap-1 mt-1">
                 {isRealWallet ? (
-                  <>
-                    <Wifi className="h-2.5 w-2.5 text-emerald-500" />
-                    {t("header.liveTestnet")}
-                  </>
+                  isWrongNetwork ? (
+                    <>
+                      <AlertTriangle className="h-2.5 w-2.5 text-rose-500" />
+                      <span className="text-rose-600 font-semibold">
+                        Wrong network: {activeNetwork} — switch to TESTNET
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Wifi className="h-2.5 w-2.5 text-emerald-500" />
+                      {t("header.liveTestnet")}
+                    </>
+                  )
                 ) : (
                   <>
                     <WifiOff className="h-2.5 w-2.5 text-amber-500" />
