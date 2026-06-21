@@ -23,8 +23,8 @@ import {
  */
 export function useSuiTransactions() {
   const account = useCurrentAccount();
+  const walletConnected = useAppStore((s) => s.wallet.connected);
   const { mutateAsync: signAndExecuteTransaction } = useSignAndExecuteTransaction();
-  const wallet = useAppStore((s) => s.wallet);
 
   const ensureWallet = () => {
     if (!account) {
@@ -57,16 +57,17 @@ export function useSuiTransactions() {
       return { success: true, digest };
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Transaction failed";
-      toast.error(options.errorMsg, { description: msg });
+      // Don't show toast if user rejected the tx (common case)
+      if (msg.toLowerCase().includes("reject") || msg.toLowerCase().includes("denied")) {
+        toast.error("Transaction rejected", { description: "You declined the transaction in your wallet." });
+      } else {
+        toast.error(options.errorMsg, { description: msg });
+      }
       return { success: false, error: msg };
     }
   };
 
   return {
-    /**
-     * Buy shares of an UMKM — submits real PTB to Sui testnet.
-     * Returns real tx digest.
-     */
     buySharesOnChain: async (opts: {
       umkmName: string;
       shares: number;
@@ -84,9 +85,6 @@ export function useSuiTransactions() {
       });
     },
 
-    /**
-     * Distribute profit to investors — submits real PTB to Sui testnet.
-     */
     distributeProfitOnChain: async (opts: {
       umkmName: string;
       investorCount: number;
@@ -104,9 +102,6 @@ export function useSuiTransactions() {
       });
     },
 
-    /**
-     * Withdraw from a stream — submits real PTB to Sui testnet.
-     */
     withdrawOnChain: async (opts: { amount: number }) => {
       const acct = ensureWallet();
       const txb = buildWithdrawPTB({
@@ -120,9 +115,6 @@ export function useSuiTransactions() {
       });
     },
 
-    /**
-     * Onboard a new UMKM — submits real PTB to Sui testnet.
-     */
     onboardOnChain: async (opts: {
       umkmName: string;
       totalShares: number;
@@ -140,9 +132,6 @@ export function useSuiTransactions() {
       });
     },
 
-    /**
-     * Buy from secondary market listing — submits real PTB.
-     */
     secondaryBuyOnChain: async (opts: {
       listingId: string;
       shares: number;
@@ -160,9 +149,6 @@ export function useSuiTransactions() {
       });
     },
 
-    /**
-     * Vote on a DAO jury report — submits real PTB.
-     */
     voteOnChain: async (opts: {
       reportId: string;
       vote: "approve" | "reject";
@@ -179,7 +165,6 @@ export function useSuiTransactions() {
       });
     },
 
-    /** Whether a real wallet is currently connected */
-    isReady: !!account && wallet.connected,
+    isReady: !!account && walletConnected,
   };
 }

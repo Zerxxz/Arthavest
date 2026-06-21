@@ -5,21 +5,20 @@ import { useEffect, useState } from "react";
 import { useAppStore } from "@/lib/store";
 
 /**
- * Real wallet hook — NO mock fallback.
+ * Real wallet hook — syncs dapp-kit wallet state to Zustand store.
  *
- * Strategy (production mode for demo video):
- * - User MUST connect a real Sui wallet via dapp-kit (Sui Wallet, Ethos, etc.)
- * - No auto-connect, no mock wallet
- * - Detects if a Sui wallet extension is installed so we can show appropriate UI
- *   ("Install Sui Wallet" prompt vs "Connect Wallet" button)
- * - Syncs real wallet state to Zustand store
+ * NO mock fallback. User must connect a real Sui wallet via dapp-kit.
  */
 export function useHybridWallet() {
   const currentAccount = useCurrentAccount();
   const currentWallet = useCurrentWallet();
   const { mutate: disconnectReal } = useDisconnectWallet();
-  const wallet = useAppStore((s) => s.wallet);
+  const walletConnected = useAppStore((s) => s.wallet.connected);
   const disconnectMock = useAppStore((s) => s.disconnectWallet);
+
+  // Extract primitives from currentWallet (avoids object identity in deps)
+  const isConnected = currentWallet.isConnected;
+  const walletName = (currentWallet as { name?: string }).name ?? "";
 
   const [hasExtension, setHasExtension] = useState<boolean | null>(null);
 
@@ -31,45 +30,52 @@ export function useHybridWallet() {
       setHasExtension(!!suiWindow.sui);
     };
     check();
-    // Re-check after 1.5s in case wallet injects late
     const t = setTimeout(check, 1500);
     return () => clearTimeout(t);
   }, []);
 
-  // Sync real wallet to store — only when user actually connects via dapp-kit
+  // Sync real wallet state to Zustand store
   useEffect(() => {
-    if (currentAccount && currentWallet.isConnected) {
-      const realAddr = currentAccount.address.slice(0, 10) + "..." + currentAccount.address.slice(-4);
-      // Determine provider label from wallet name
-      const walletName = (currentWallet as { name?: string }).name?.toLowerCase() ?? "sui";
-      const provider: "google" | "twitch" | "ethos" = walletName.includes("ethos")
+    if (currentAccount && isConnected) {
+      const realAddr =
+        currentAccount.address.slice(0, 10) + "..." + currentAccount.address.slice(-4);
+
+      // Determine provider label safely
+      const lowerName = (walletName || "").toLowerCase();
+      const provider: "google" | "twitch" | "ethos" = lowerName.includes("ethos")
         ? "ethos"
-        : walletName.includes("google")
+        : lowerName.includes("google")
           ? "google"
-          : walletName.includes("twitch")
+          : lowerName.includes("twitch")
             ? "twitch"
             : "ethos";
-      const viaZkLogin = walletName.includes("google") || walletName.includes("twitch");
+      const viaZkLogin = lowerName.includes("google") || lowerName.includes("twitch");
 
-      useAppStore.setState((state) => ({
-        wallet: {
-          ...state.wallet,
-          connected: true,
-          address: realAddr,
-          suiBalance: state.wallet.suiBalance || 0, // Real balance would come from SuiClient
-          idrBalance: state.wallet.idrBalance || 75_000_000, // Demo IDR balance for marketplace UX
-          viaZkLogin,
-          provider,
-        },
-      }));
-    } else if (!currentWallet.isConnected && wallet.connected) {
+      useAppStore.setState((state) => {
+        // Skip if already synced with same address (prevents infinite loop)
+        if (state.wallet.address === realAddr && state.wallet.connected) {
+          return state;
+        }
+        return {
+          wallet: {
+            ...state.wallet,
+            connected: true,
+            address: realAddr,
+            suiBalance: state.wallet.suiBalance || 0,
+            idrBalance: state.wallet.idrBalance || 75_000_000,
+            viaZkLogin,
+            provider,
+          },
+        };
+      });
+    } else if (!isConnected && walletConnected) {
       // Real wallet disconnected — clear store
       disconnectMock();
     }
-  }, [currentAccount, currentWallet, wallet.connected, disconnectMock]);
+  }, [currentAccount, isConnected, walletName, walletConnected, disconnectMock]);
 
   const handleDisconnect = () => {
-    if (currentWallet.isConnected) {
+    if (isConnected) {
       disconnectReal();
     }
     disconnectMock();
@@ -77,7 +83,7 @@ export function useHybridWallet() {
 
   return {
     hasExtension,
-    isRealWallet: currentWallet.isConnected,
+    isRealWallet: isConnected,
     realAccount: currentAccount,
     disconnect: handleDisconnect,
   };
