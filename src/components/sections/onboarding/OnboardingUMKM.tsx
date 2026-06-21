@@ -36,6 +36,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { formatIDR, shortAddress } from "@/lib/format";
 import { useTranslation } from "@/lib/useTranslation";
+import { useSuiTransactions } from "@/lib/sui/useSuiTransactions";
+import { getExplorerTxUrl } from "@/lib/sui/transactions";
 import { categoryIconPath } from "@/lib/category-icons";
 import type { UMKMCategory } from "@/lib/types";
 
@@ -62,6 +64,7 @@ export function OnboardingUMKM() {
   const submitOnboard = useAppStore((s) => s.submitOnboard);
   const wallet = useAppStore((s) => s.wallet);
   const { t } = useTranslation();
+  const suiTx = useSuiTransactions();
 
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState<"idle" | "building" | "signing" | "executing" | "done">("idle");
@@ -77,7 +80,44 @@ export function OnboardingUMKM() {
 
   const handleSubmit = async () => {
     setSubmitting("building");
-    await new Promise((r) => setTimeout(r, 800));
+    await new Promise((r) => setTimeout(r, 600));
+
+    // Try real on-chain transaction first
+    if (suiTx.isReady && form.legalDocBlobId) {
+      setSubmitting("signing");
+      const result = await suiTx.onboardOnChain({
+        umkmName: form.name,
+        location: form.location,
+        docsBlobId: form.legalDocBlobId,
+        totalShares: form.totalShares,
+        pricePerShare: form.pricePerShare,
+      });
+      setSubmitting("executing");
+      await new Promise((r) => setTimeout(r, 800));
+
+      if (result.success) {
+        // Also update mock store for UX continuity
+        submitOnboard();
+        setSubmitting("done");
+        toast.success("UMKM onboarded on-chain!", {
+          description: `Real tx: ${result.digest?.slice(0, 12)}...${result.digest?.slice(-6)} · ${form.totalShares} ARTHAVEST tokens minted`,
+          action: {
+            label: "View on Sui Explorer",
+            onClick: () => window.open(getExplorerTxUrl(result.digest!), "_blank"),
+          },
+        });
+        setTimeout(() => {
+          setSubmitting("idle");
+          setStep(0);
+        }, 2500);
+        return;
+      }
+      // If real tx failed, fall through to mock
+      setSubmitting("idle");
+      return;
+    }
+
+    // Mock simulation fallback (no real wallet or no Walrus blob)
     setSubmitting("signing");
     await new Promise((r) => setTimeout(r, 1000));
     setSubmitting("executing");
