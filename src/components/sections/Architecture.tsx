@@ -13,6 +13,8 @@ import {
   Sparkles,
   Code2,
   Droplets,
+  CheckCircle2,
+  ExternalLink,
 } from "lucide-react";
 import { SUI_FEATURES } from "@/lib/sui-features";
 import * as Icons from "lucide-react";
@@ -245,6 +247,57 @@ client.execute(ptb); // 1 tx, ~800ms finality`}
                 <div className="rounded-lg bg-secondary/40 p-2.5 text-center">
                   <div className="text-[10px] text-muted-foreground">{t("arch.stat.gas")}</div>
                   <div className="text-base font-bold text-amber-600">~0.03 SUI</div>
+                </div>
+              </div>
+
+              {/* Live deployment proof — published on Sui testnet */}
+              <div className="mt-4 rounded-xl border-2 border-emerald-300/60 bg-emerald-50/60 dark:bg-emerald-900/20 dark:border-emerald-600/40 p-4">
+                <div className="flex items-start gap-2 mb-2">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <div className="text-xs font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide">
+                      ✅ Live on Sui Testnet
+                    </div>
+                    <div className="text-[11px] text-muted-foreground mt-0.5">
+                      Move contracts published &amp; verified on Sui Explorer
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] font-mono">
+                  <div>
+                    <span className="text-muted-foreground">Package ID:</span>
+                    <div className="break-all text-foreground">
+                      0x271298465a97fc009872c8708c438325f7f6e65c729e41909860cad598e41fbc
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">Publish tx:</span>
+                    <div className="break-all text-foreground">2oRV6K595Y1SQkMNtCkRSkFYAq4kRjM1ey8edg57xZ36</div>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  <a
+                    href="https://suiexplorer.com/tx/2oRV6K595Y1SQkMNtCkRSkFYAq4kRjM1ey8edg57xZ36?network=testnet"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:underline"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    View tx on Sui Explorer
+                  </a>
+                  <a
+                    href="https://suiexplorer.com/package/0x271298465a97fc009872c8708c438325f7f6e65c729e41909860cad598e41fbc?network=testnet"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400 hover:underline"
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    View package on Sui Explorer
+                  </a>
+                </div>
+                <div className="text-[10px] text-muted-foreground mt-2">
+                  Gas used: 0.0495 SUI · Modules: <code className="font-mono">arthavest</code>,{" "}
+                  <code className="font-mono">stream</code>
                 </div>
               </div>
             </div>

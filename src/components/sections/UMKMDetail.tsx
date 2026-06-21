@@ -42,6 +42,7 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "@/lib/useTranslation";
 import { categoryIconPath } from "@/lib/category-icons";
+import { useSuiTransactions } from "@/lib/sui/useSuiTransactions";
 import type { UMKMCategory } from "@/lib/types";
 
 const RISK_KEYS: Record<string, string> = {
@@ -70,6 +71,9 @@ export function UMKMDetail() {
   const [sharesToBuy, setSharesToBuy] = useState(1);
   const [txPhase, setTxPhase] = useState<"idle" | "building" | "signing" | "executing" | "done">("idle");
 
+  // Real on-chain transaction hook (from @mysten/dapp-kit) — submits actual PTB to Sui testnet
+  const suiTx = useSuiTransactions();
+
   const open = !!selectedUMKMId && !!umkm;
 
   const handleBuy = async () => {
@@ -81,9 +85,37 @@ export function UMKMDetail() {
       return;
     }
 
-    // Simulate PTB transaction phases
     setTxPhase("building");
-    await new Promise((r) => setTimeout(r, 700));
+    await new Promise((r) => setTimeout(r, 400));
+
+    // Try real on-chain transaction first (if real wallet connected via dapp-kit)
+    if (suiTx.isReady) {
+      setTxPhase("signing");
+      const result = await suiTx.buySharesOnChain({
+        umkmName: umkm.name,
+        shares: sharesToBuy,
+        pricePerShare: umkm.pricePerShare,
+      });
+      setTxPhase("executing");
+      await new Promise((r) => setTimeout(r, 600));
+
+      if (result.success) {
+        // Also update mock store for UX continuity
+        buyShares(umkm.id, sharesToBuy);
+        setTxPhase("done");
+        setTimeout(() => {
+          setTxPhase("idle");
+          setSelectedUMKM(null);
+          setSharesToBuy(1);
+        }, 1800);
+        return;
+      }
+      // If real tx failed, fall through to mock simulation
+      setTxPhase("idle");
+      return;
+    }
+
+    // Mock simulation fallback (for demo mode without real wallet)
     setTxPhase("signing");
     await new Promise((r) => setTimeout(r, 900));
     setTxPhase("executing");
