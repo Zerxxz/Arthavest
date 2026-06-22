@@ -6,7 +6,7 @@
 
 **Fractional ownership marketplace for Indonesian MSMEs** with profit distribution via SuiStream primitive on the Sui network. Built for [Sui Overflow Hackathon 2025](https://overflow.sui.io/).
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-0D9488?style=for-the-badge&logo=vercel&logoColor=white)](https://preview-arthavest.space-z.ai/) [![Sui](https://img.shields.io/badge/Sui-Network-4DA2FF?style=for-the-badge&logo=sui&logoColor=white)](https://sui.io/) [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/) [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-0D9488?style=for-the-badge&logo=vercel&logoColor=white)](https://arthavest.web.id) [![Sui](https://img.shields.io/badge/Sui-Network-4DA2FF?style=for-the-badge&logo=sui&logoColor=white)](https://sui.io/) [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/) [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
 <p align="center">
   <img src="public/logo-wordmark.png" alt="Arthavest" width="280">
@@ -349,7 +349,7 @@ Language preference persists in `localStorage`. Switch via the language dropdown
 
 | Deliverable | Path | Description |
 |-------------|------|-------------|
-| **Live Demo** | [preview link](https://preview-arthavest.space-z.ai/) | Full interactive app (8 tabs) |
+| **Live Demo** | [preview link](https://arthavest.web.id) | Full interactive app (8 tabs) |
 | **Pitch Deck** | [`download/arthavest-pitch-deck.pptx`](download/arthavest-pitch-deck.pptx) | 8-slide English deck (1.6 MB) |
 | **Demo Video Script** | [`download/demo-video-script.md`](download/demo-video-script.md) | 2-minute video script with 6 scenes |
 | **Move Contracts** | [`contracts/arthavest.move`](contracts/arthavest.move), [`contracts/stream.move`](contracts/stream.move) | Smart contract source |
@@ -367,6 +367,6 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 **Built with ☕ in Bandung · Move + Sui + Next.js**
 
-[Live Demo](https://preview-arthavest.space-z.ai/) · [Pitch Deck](download/arthavest-pitch-deck.pptx) · [Smart Contracts](contracts/) · [Deploy Guide](contracts/DEPLOY.md)
+[Live Demo](https://arthavest.web.id) · [Pitch Deck](download/arthavest-pitch-deck.pptx) · [Smart Contracts](contracts/) · [Deploy Guide](contracts/DEPLOY.md)
 
 </div>
