@@ -105,13 +105,15 @@ export function Header() {
                   ) : (
                     <>
                       <Wifi className="h-2.5 w-2.5 text-emerald-500" />
-                      {t("header.liveTestnet")}
+                      <span className="text-emerald-600 font-semibold">
+                        Live · Connected to Testnet
+                      </span>
                     </>
                   )
                 ) : (
                   <>
-                    <WifiOff className="h-2.5 w-2.5 text-amber-500" />
-                    {t("header.demoMode")}
+                    <Wifi className="h-2.5 w-2.5 text-emerald-500" />
+                    Sui Testnet · Ready
                   </>
                 )}
               </span>
