@@ -405,7 +405,7 @@ const en: Dict = {
   "footer.tagline": "powered by SuiStream · Sui Network",
   "footer.desc": "Fractional ownership platform for Indonesian MSMEs with profit distribution via SuiStream primitive. Built for Sui Overflow Hackathon — RWA marketplace + DeFi money stream combo on Sui object-centric model.",
   "footer.suiStreamPrimitive": "SuiStream Primitive",
-  "footer.suiOverflow": "Sui Overflow 2025",
+  "footer.suiOverflow": "Sui Overflow 2026",
   "footer.product": "PRODUCT",
   "footer.resources": "RESOURCES",
   "footer.marketplace": "MSME Marketplace",
@@ -413,7 +413,7 @@ const en: Dict = {
   "footer.umkmDashboard": "MSME Dashboard",
   "footer.howItWorks": "How It Works",
   "footer.suiArch": "Sui Architecture",
-  "footer.copyright": "© 2025 Arthavest · Built for Sui Overflow Hackathon. Demo data — not real investment.",
+  "footer.copyright": "© 2026 Arthavest · Built for Sui Overflow Hackathon. Demo data — not real investment.",
   "footer.madeWith": "Made with ☕ in Bandung · Move + Sui + Next.js",
 
   // Common
@@ -810,7 +810,7 @@ const id: Dict = {
   "footer.tagline": "powered by SuiStream · Sui Network",
   "footer.desc": "Platform kepemilikan fraksional UMKM Indonesia dengan distribusi profit via SuiStream primitive. Dibangun untuk Sui Overflow Hackathon — kombinasi RWA marketplace + DeFi money stream di atas Sui object-centric model.",
   "footer.suiStreamPrimitive": "SuiStream Primitive",
-  "footer.suiOverflow": "Sui Overflow 2025",
+  "footer.suiOverflow": "Sui Overflow 2026",
   "footer.product": "PRODUK",
   "footer.resources": "RESOURCES",
   "footer.marketplace": "Marketplace UMKM",
@@ -818,7 +818,7 @@ const id: Dict = {
   "footer.umkmDashboard": "Dashboard UMKM",
   "footer.howItWorks": "Cara Kerja",
   "footer.suiArch": "Arsitektur Sui",
-  "footer.copyright": "© 2025 Arthavest · Built for Sui Overflow Hackathon. Demo data — bukan investasi nyata.",
+  "footer.copyright": "© 2026 Arthavest · Built for Sui Overflow Hackathon. Demo data — bukan investasi nyata.",
   "footer.madeWith": "Made with ☕ in Bandung · Move + Sui + Next.js",
 
   // Common
@@ -1215,7 +1215,7 @@ const zh: Dict = {
   "footer.tagline": "由 SuiStream 驱动 · Sui 网络",
   "footer.desc": "印尼中小企业的份额化所有权平台,通过 SuiStream 原语分配利润。为 Sui Overflow 黑客松打造——Sui 对象中心模型上的 RWA 市场 + DeFi 货币流组合。",
   "footer.suiStreamPrimitive": "SuiStream 原语",
-  "footer.suiOverflow": "Sui Overflow 2025",
+  "footer.suiOverflow": "Sui Overflow 2026",
   "footer.product": "产品",
   "footer.resources": "资源",
   "footer.marketplace": "商户市场",
@@ -1223,7 +1223,7 @@ const zh: Dict = {
   "footer.umkmDashboard": "商户面板",
   "footer.howItWorks": "工作原理",
   "footer.suiArch": "Sui 架构",
-  "footer.copyright": "© 2025 Arthavest · 为 Sui Overflow 黑客松打造。演示数据——非真实投资。",
+  "footer.copyright": "© 2026 Arthavest · 为 Sui Overflow 黑客松打造。演示数据——非真实投资。",
   "footer.madeWith": "用 ☕ 在万隆打造 · Move + Sui + Next.js",
 
   // Common

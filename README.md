@@ -4,7 +4,7 @@
 
 ### Invest in Indonesian MSMEs. Profits flow per second.
 
-**Fractional ownership marketplace for Indonesian MSMEs** with profit distribution via SuiStream primitive on the Sui network. Built for [Sui Overflow Hackathon 2025](https://overflow.sui.io/).
+**Fractional ownership marketplace for Indonesian MSMEs** with profit distribution via SuiStream primitive on the Sui network. Built for [Sui Overflow Hackathon 2026](https://overflow.sui.io/).
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-0D9488?style=for-the-badge&logo=vercel&logoColor=white)](https://arthavest.web.id) [![Sui](https://img.shields.io/badge/Sui-Network-4DA2FF?style=for-the-badge&logo=sui&logoColor=white)](https://sui.io/) [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/) [![License](https://img.shields.io/badge/License-MIT-F59E0B?style=for-the-badge)](LICENSE)
 
@@ -338,10 +338,10 @@ Language preference persists in `localStorage`. Switch via the language dropdown
 
 | Phase | Timeline | Goals |
 |-------|----------|-------|
-| **Hackathon MVP** | Q3 2025 (NOW) | 8 flows complete, Move contracts written, demo data |
-| **Testnet Public Launch** | Q4 2025 | Publish Move contracts, real @mysten/dapp-kit, real Walrus upload, 10 MSME pilots (Bandung) |
-| **Sui Mainnet Launch** | Q1 2026 | Active DAO jury (5 elected), DeepBook secondary market live, 100 MSMEs onboarded, IDR→SUI on-ramp |
-| **SEA Expansion** | Q2 2026 | Vietnam & Philippines pilots, mobile app (React Native), SuiStream SDK open-source, koperasi MSME partnerships |
+| **Hackathon MVP** | Q1 2026 (NOW) | 8 flows complete, Move contracts written, demo data |
+| **Testnet Public Launch** | Q2 2026 | Publish Move contracts, real @mysten/dapp-kit, real Walrus upload, 10 MSME pilots (Bandung) |
+| **Sui Mainnet Launch** | Q3 2026 | Active DAO jury (5 elected), DeepBook secondary market live, 100 MSMEs onboarded, IDR→SUI on-ramp |
+| **SEA Expansion** | Q4 2026 | Vietnam & Philippines pilots, mobile app (React Native), SuiStream SDK open-source, koperasi MSME partnerships |
 
 ---
 
